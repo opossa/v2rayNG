@@ -296,7 +296,7 @@
     <string name="routing_settings_tips">คั่นด้วยเครื่องหมายจุลภาค (,) เลือกโดเมนหรือ ip</string>
     <string name="routing_settings_save">บันทึก</string>
     <string name="routing_settings_delete">ล้าง</string>
-  <string name="routing_settings_rule_title">การตั้งค่ากฎการกำหนดเส้นทาง</string>
+    <string name="routing_settings_rule_title">การตั้งค่ากฎการกำหนดเส้นทาง</string>
     <string name="routing_settings_add_rule">เพิ่มกฎ</string>
     <string name="routing_settings_import_predefined_rulesets">นำเข้ากฎที่กำหนดไว้ล่วงหน้า</string>
     <string name="routing_settings_import_rulesets_tip">กฎที่มีอยู่จะถูกลบ คุณแน่ใจที่จะดำเนินการต่อหรือไม่?</string>
