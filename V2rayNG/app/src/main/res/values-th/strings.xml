@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">v2rayNG</string>
+    <string name="app_widget_name">สวิตช์</string>
+    <string name="app_tile_name">สวิตช์</string>
+    <string name="app_tile_first_use">การใช้ฟีเจอร์นี้ครั้งแรก โปรดใช้แอปเพื่อเพิ่มเซิร์ฟเวอร์</string>
+    <string name="navigation_drawer_open">เปิดลิ้นชักนำทาง</string>
+    <string name="navigation_drawer_close">ปิดลิ้นชักนำทาง</string>
+    <string name="migration_success">การย้ายข้อมูลสำเร็จ!</string>
+    <string name="migration_fail">การย้ายข้อมูลล้มเหลว!</string>
+    <string name="pull_down_to_refresh">กรุณาดึงลงเพื่อรีเฟรช!</string>
+
+    <!-- การแจ้งเตือน -->
+    <string name="notification_action_stop_v2ray">หยุด</string>
+    <string name="toast_permission_denied">ไม่สามารถขอสิทธิ์ได้</string>
+    <string name="toast_permission_denied_notification">ไม่สามารถขอสิทธิ์การแจ้งเตือนได้</string>
+    <string name="notification_action_more">คลิกเพื่อดูเพิ่มเติม</string>
+    <string name="toast_services_start">เริ่มต้นบริการ</string>
+    <string name="toast_services_stop">หยุดบริการ</string>
+    <string name="toast_services_success">เริ่มต้นบริการสำเร็จ</string>
+    <string name="toast_services_failure">เริ่มต้นบริการล้มเหลว</string>
+
+    <!-- ServerActivity -->
+    <string name="title_server">ไฟล์การกำหนดค่า</string>
+    <string name="menu_item_add_config">เพิ่มการกำหนดค่า</string>
+    <string name="menu_item_save_config">บันทึกการกำหนดค่า</string>
+    <string name="menu_item_del_config">ลบการกำหนดค่า</string>
+    <string name="menu_item_import_config_qrcode">นำเข้าการกำหนดค่าจาก QRcode</string>
+    <string name="menu_item_import_config_clipboard">นำเข้าการกำหนดค่าจากคลิปบอร์ด</string>
+    <string name="menu_item_import_config_local">นำเข้าการกำหนดค่าจากภายในเครื่อง</string>
+    <string name="menu_item_import_config_manually_vmess">พิมพ์ด้วยตนเอง [VMess]</string>
+    <string name="menu_item_import_config_manually_vless">พิมพ์ด้วยตนเอง [VLESS]</string>
+    <string name="menu_item_import_config_manually_ss">พิมพ์ด้วยตนเอง [Shadowsocks]</string>
+    <string name="menu_item_import_config_manually_socks">พิมพ์ด้วยตนเอง [SOCKS]</string>
+    <string name="menu_item_import_config_manually_http">พิมพ์ด้วยตนเอง [HTTP]</string>
+    <string name="menu_item_import_config_manually_trojan">พิมพ์ด้วยตนเอง [Trojan]</string>
+    <string name="menu_item_import_config_manually_wireguard">พิมพ์ด้วยตนเอง [Wireguard]</string>
+    <string name="menu_item_import_config_manually_hysteria2">พิมพ์ด้วยตนเอง [Hysteria2]</string>
+    <string name="del_config_comfirm">ยืนยันการลบ?</string>
+    <string name="del_invalid_config_comfirm">กรุณาทดสอบก่อนลบ! ยืนยันการลบ?</string>
+    <string name="server_lab_remarks">หมายเหตุ</string>
+    <string name="server_lab_address">ที่อยู่</string>
+    <string name="server_lab_port">พอร์ต</string>
+    <string name="server_lab_id">รหัส</string>
+    <string name="server_lab_alterid">alterId</string>
+    <string name="server_lab_security">การรักษาความปลอดภัย</string>
+    <string name="server_lab_network">เครือข่าย</string>
+    <string name="server_lab_more_function">การขนส่ง</string>
+    <string name="server_lab_head_type">ประเภทหัวข้อ</string>
+    <string name="server_lab_mode_type">โหมด gRPC</string>
+    <string name="server_lab_request_host">โฮสต์</string>
+    <string name="server_lab_request_host_http">โฮสต์ http</string>
+    <string name="server_lab_request_host_ws">โฮสต์ ws</string>
+    <string name="server_lab_request_host_httpupgrade">โฮสต์ httpupgrade</string>
+    <string name="server_lab_request_host_xhttp">โฮสต์ xhttp</string>
+    <string name="server_lab_request_host_h2">โฮสต์ h2</string>
+    <string name="server_lab_request_host_quic">ความปลอดภัย QUIC</string>
+    <string name="server_lab_request_host_grpc">หน่วยงาน gRPC</string>
+    <string name="server_lab_path">เส้นทาง</string>
+    <string name="server_lab_path_ws">เส้นทาง ws</string>
+    <string name="server_lab_path_httpupgrade">เส้นทาง httpupgrade</string>
+    <string name="server_lab_path_xhttp">เส้นทาง xhttp</string>
+    <string name="server_lab_path_h2">เส้นทาง h2</string>
+    <string name="server_lab_path_quic">คีย์ QUIC</string>
+    <string name="server_lab_path_kcp">seed kcp</string>
+    <string name="server_lab_path_grpc">ชื่อบริการ gRPC</string>
+    <string name="server_lab_stream_security">TLS</string>
+    <string name="server_lab_stream_fingerprint" translatable="false">ลายนิ้วมือ</string>
+    <string name="server_lab_stream_alpn">Alpn</string>
+    <string name="server_lab_allow_insecure">allowInsecure</string>
+    <string name="server_lab_sni">SNI</string>
+    <string name="server_lab_address3">ที่อยู่</string>
+    <string name="server_lab_port3">พอร์ต</string>
+    <string name="server_lab_id3">รหัสผ่าน</string>
+    <string name="server_lab_security3">การรักษาความปลอดภัย</string>
+    <string name="server_lab_id4">รหัสผ่าน (ไม่บังคับ)</string>
+    <string name="server_lab_security4">ผู้ใช้ (ไม่บังคับ)</string>
+    <string name="server_lab_encryption">การเข้ารหัส</string>
+    <string name="server_lab_flow">โฟลว์</string>
+    <string name="server_lab_public_key">PublicKey</string>
+    <string name="server_lab_preshared_key">PreSharedKey (ไม่บังคับ)</string>
+    <string name="server_lab_short_id">ShortId</string>
+    <string name="server_lab_spider_x">SpiderX</string>
+    <string name="server_lab_mldsa65_verify">Mldsa65Verify</string>
+    <string name="server_lab_secret_key">SecretKey</string>
+    <string name="server_lab_reserved">Reserved (ไม่บังคับ, คั่นด้วยเครื่องหมายจุลภาค)</string>
+    <string name="server_lab_local_address">ที่อยู่ภายในเครื่อง (ไม่บังคับ IPv4/IPv6, คั่นด้วยเครื่องหมายจุลภาค)</string>
+    <string name="server_lab_local_mtu">Mtu (ไม่บังคับ, ค่าเริ่มต้น 1420)</string>
+    <string name="toast_success">สำเร็จ</string>
+    <string name="toast_failure">ล้มเหลว</string>
+    <string name="toast_none_data">ไม่มีข้อมูล</string>
+    <string name="toast_incorrect_protocol">โปรโตคอลไม่ถูกต้อง</string>
+    <string name="toast_decoding_failed">การถอดรหัสล้มเหลว</string>
+    <string name="title_file_chooser">เลือกไฟล์การกำหนดค่า</string>
+    <string name="toast_require_file_manager">กรุณาติดตั้งตัวจัดการไฟล์</string>
+    <string name="server_customize_config">กำหนดการกำหนดค่าเอง</string>
+    <string name="toast_config_file_invalid">การกำหนดค่าไม่ถูกต้อง</string>
+    <string name="server_lab_content">เนื้อหา</string>
+    <string name="toast_none_data_clipboard">ไม่มีข้อมูลในคลิปบอร์ด</string>
+    <string name="toast_invalid_url">URL ไม่ถูกต้อง</string>
+    <string name="toast_insecure_url_protocol">กรุณาอย่าใช้ที่อยู่สมัครสมาชิกโปรโตคอล HTTP ที่ไม่ปลอดภัย</string>
+    <string name="server_lab_need_inbound">ตรวจสอบให้แน่ใจว่าพอร์ตอินเบานด์สอดคล้องกับการตั้งค่า</string>
+    <string name="toast_malformed_josn">การกำหนดค่ารูปแบบผิด</string>
+    <string name="server_lab_request_host6">โฮสต์ (SNI) (ไม่บังคับ)</string>
+    <string name="toast_action_not_allowed">ไม่อนุญาตให้ดำเนินการ</string>
+    <string name="server_obfs_password">รหัสผ่าน Obfs</string>
+    <string name="server_lab_port_hop">Port Hopping (จะแทนที่พอร์ต)</string>
+    <string name="server_lab_port_hop_interval">ช่วงเวลา Port Hopping</string>
+    <string name="server_lab_stream_pinsha256">pinSHA256</string>
+    <string name="server_lab_bandwidth_down">แบนด์วิดท์ลดลง (หน่วย)</string>
+    <string name="server_lab_bandwidth_up">แบนด์วิดท์ขึ้น (หน่วย)</string>
+    <string name="server_lab_xhttp_mode">โหมด XHTTP</string>
+    <string name="server_lab_xhttp_extra">XHTTP Extra raw JSON, รูปแบบ: { XHTTPObject }</string>
+
+    <!-- UserAssetActivity -->
+    <string name="toast_asset_copy_failed">การคัดลอกไฟล์ล้มเหลว กรุณาใช้ตัวจัดการไฟล์</string>
+    <string name="menu_item_add_asset">เพิ่มแอสเซต</string>
+    <string name="menu_item_add_file">เพิ่มไฟล์</string>
+    <string name="menu_item_add_url">เพิ่ม URL</string>
+    <string name="menu_item_scan_qrcode">สแกน QRcode</string>
+    <string name="title_url">URL</string>
+    <string name="menu_item_download_file">ดาวน์โหลดไฟล์</string>
+    <string name="title_user_asset_add_url">เพิ่ม URL แอสเซต</string>
+    <string name="msg_file_not_found">ไม่พบไฟล์</string>
+    <string name="msg_remark_is_duplicate">หมายเหตุดังกล่าวมีอยู่แล้ว</string>
+    <string name="asset_geo_files_sources">แหล่งที่มาไฟล์ภูมิศาสตร์ (ไม่บังคับ)</string>
+
+    <!-- PerAppProxyActivity -->
+    <string name="msg_dialog_progress">กำลังโหลด</string>
+    <string name="menu_item_search">ค้นหา</string>
+    <string name="menu_item_select_all">เลือกทั้งหมด</string>
+    <string name="msg_enter_keywords">ป้อนคำหลัก</string>
+    <string name="switch_bypass_apps_mode">โหมดบายพาส</string>
+    <string name="menu_item_select_proxy_app">เลือกแอปพร็อกซี่อัตโนมัติ</string>
+    <string name="msg_downloading_content">กำลังดาวน์โหลดเนื้อหา</string>
+    <string name="menu_item_export_proxy_app">ส่งออกไปยังคลิปบอร์ด</string>
+    <string name="menu_item_import_proxy_app">นำเข้าจากคลิปบอร์ด</string>
+    <string name="per_app_proxy_settings">การตั้งค่าแอป</string>
+    <string name="per_app_proxy_settings_enable">เปิดใช้งานต่อแอป</string>
+
+    <!-- การตั้งค่า -->
+    <string name="title_settings">การตั้งค่า</string>
+    <string name="title_advanced">การตั้งค่าขั้นสูง</string>
+    <string name="title_core_settings">การตั้งค่าหลัก</string>
+    <string name="title_vpn_settings">การตั้งค่า VPN</string>
+    <string name="title_pref_per_app_proxy">พร็อกซี่ต่อแอป</string>
+    <string name="summary_pref_per_app_proxy">ทั่วไป: แอปที่ถูกเลือกใช้พร็อกซี่, แอปที่ไม่ได้เลือกเชื่อมต่อโดยตรง; \nโหมดบายพาส: แอปที่ถูกเลือกเชื่อมต่อโดยตรง, แอปที่ไม่ได้เลือกใช้พร็อกซี่ \nตัวเลือกเลือกแอปพลิเคชันพร็อกซี่อัตโนมัติอยู่ในเมนู</string>
+    <string name="title_pref_is_booted">เชื่อมต่ออัตโนมัติเมื่อเริ่มระบบ</string>
+    <string name="summary_pref_is_booted">เชื่อมต่อกับเซิร์ฟเวอร์ที่เลือกอัตโนมัติเมื่อเริ่มระบบ ซึ่งอาจไม่สำเร็จ</string>
+
+    <string name="title_mux_settings">การตั้งค่า Mux</string>
+    <string name="title_pref_mux_enabled">เปิดใช้งาน Mux</string>
+    <string name="summary_pref_mux_enabled">เร็วขึ้นแต่ก็อาจทำให้การเชื่อมต่อไม่เสถียร\nปรับแต่งวิธีการจัดการ TCP, UDP และ QUIC ด้านล่าง</string>
+    <string name="title_pref_mux_concurency">การเชื่อมต่อ TCP (ช่วง -1 ถึง 1024)</string>
+    <string name="title_pref_mux_xudp_concurency">การเชื่อมต่อ XUDP (ช่วง -1 ถึง 1024)</string>
+    <string name="title_pref_mux_xudp_quic">การจัดการ QUIC ในอุโมงค์ mux</string>
+    <string-array name="mux_xudp_quic_entries">
+        <item>ปฏิเสธ</item>
+        <item>อนุญาต</item>
+        <item>ข้าม</item>
+    </string-array>
+
+    <string name="title_pref_speed_enabled">เปิดใช้งานการแสดงความเร็ว</string>
+    <string name="summary_pref_speed_enabled">แสดงความเร็วปัจจุบันในการแจ้งเตือน\nไอคอนการแจ้งเตือนจะเปลี่ยนไปตามการใช้งาน</string>
+
+    <string name="title_pref_sniffing_enabled">เปิดใช้งาน Sniffing</string>
+    <string name="summary_pref_sniffing_enabled">พยายามตรวจจับโดเมนจากแพ็กเก็ต (เปิดโดยค่าเริ่มต้น)</string>
+    <string name="title_pref_route_only_enabled">เปิดใช้งาน routeOnly</string>
+    <string name="summary_pref_route_only_enabled">ใช้ชื่อโดเมนที่ตรวจจับได้สำหรับการกำหนดเส้นทางเท่านั้น และเก็บที่อยู่เป้าหมายเป็นที่อยู่ IP</string>
+
+    <string name="title_pref_local_dns_enabled">เปิดใช้งาน DNS ภายในเครื่อง</string>
+    <string name="summary_pref_local_dns_enabled">DNS ที่ประมวลผลโดยโมดูล DNS ของ core (แนะนำหากคุณต้องการกำหนดเส้นทางบายพาสที่อยู่ LAN และ mainland)</string>
+
+    <string name="title_pref_fake_dns_enabled">เปิดใช้งาน fake DNS</string>
+    <string name="summary_pref_fake_dns_enabled">DNS ในพื้นที่ส่งคืนที่อยู่ IP ปลอม (เร็วกว่า แต่อาจไม่ทำงานกับแอปบางตัว)</string>
+
+    <string name="title_pref_prefer_ipv6">เลือก IPv6</string>
+    <string name="summary_pref_prefer_ipv6">เปิดใช้งานเส้นทาง IPv6 และเลือกที่อยู่ IPv6</string>
+
+    <string name="title_pref_remote_dns">รีโมท DNS (udp/tcp/https/quic) (ไม่บังคับ)</string>
+    <string name="summary_pref_remote_dns">DNS</string>
+
+    <string name="title_pref_vpn_dns">VPN DNS (เฉพาะ IPv4/v6)</string>
+    <string name="title_pref_vpn_bypass_lan">VPN บายพาส LAN หรือไม่</string>
+
+    <string name="title_pref_vpn_interface_address">ที่อยู่อินเทอร์เฟซ VPN</string>
+
+    <string name="title_pref_vpn_mtu">VPN MTU (ค่าเริ่มต้น 1500)</string>
+
+
+    <string name="title_pref_domestic_dns">Domestic DNS (ไม่บังคับ)</string>
+    <string name="summary_pref_domestic_dns">DNS</string>
+
+    <string name="title_pref_dns_hosts">โฮสต์ DNS (รูปแบบ: domain:address,…)</string>
+    <string name="summary_pref_dns_hosts">domain:address,…</string>
+
+    <string name="title_pref_delay_test_url">URL ทดสอบความหน่วงจริง (http/https)</string>
+    <string name="summary_pref_delay_test_url">Url</string>
+
+    <string name="title_pref_proxy_sharing_enabled">อนุญาตการเชื่อมต่อจาก LAN</string>
+    <string name="summary_pref_proxy_sharing_enabled">อุปกรณ์อื่นๆ สามารถเชื่อมต่อกับพร็อกซี่ผ่านที่อยู่ IP ของคุณผ่านพร็อกซี่ภายในเครื่อง เปิดใช้งานเฉพาะในเครือข่ายที่เชื่อถือได้เพื่อหลีกเลี่ยงการเชื่อมต่อที่ไม่ได้รับอนุญาต</string>
+    <string name="toast_warning_pref_proxysharing_short">อนุญาตการเชื่อมต่อจาก LAN โปรดตรวจสอบว่าคุณอยู่ในเครือข่ายที่เชื่อถือได้</string>
+
+    <string name="title_pref_allow_insecure">allowInsecure</string>
+    <string name="summary_pref_allow_insecure">เมื่อเลือก TLS อนุญาตการเชื่อมต่อที่ไม่ปลอดภัยโดยค่าเริ่มต้น</string>
+
+    <string name="title_pref_socks_port">พอร์ตพร็อกซี่ภายในเครื่อง</string>
+    <string name="summary_pref_socks_port">พอร์ตพร็อกซี่ภายในเครื่อง</string>
+
+    <string name="title_pref_local_dns_port">พอร์ต DNS ภายในเครื่อง</string>
+    <string name="summary_pref_local_dns_port">พอร์ต DNS ภายในเครื่อง</string>
+
+    <string name="title_pref_confirm_remove">ยืนยันการลบไฟล์การกำหนดค่า</string>
+    <string name="summary_pref_confirm_remove">การจะลบไฟล์การกำหนดค่าหรือไม่นั้นต้องได้รับการยืนยันจากผู้ใช้อีกครั้ง</string>
+
+    <string name="title_pref_start_scan_immediate">เริ่มการสแกนทันที</string>
+    <string name="summary_pref_start_scan_immediate">เปิดกล้องเพื่อสแกนทันทีเมื่อเริ่มต้น มิฉะนั้นคุณสามารถเลือกที่จะสแกนรหัสหรือเลือกรูปภาพในแถบเครื่องมือ</string>
+
+    <string name="title_pref_append_http_proxy">เพิ่ม HTTP Proxy ลงใน VPN</string>
+    <string name="summary_pref_append_http_proxy">HTTP proxy จะถูกใช้โดยตรงจาก (เบราว์เซอร์/ แอปที่รองรับบางส่วน) โดยไม่ผ่านอุปกรณ์ NIC เสมือน (Android 10+)</string>
+
+    <string name="title_pref_double_column_display">เปิดใช้งานการแสดงสองคอลัมน์</string>
+    <string name="summary_pref_double_column_display">รายการโปรไฟล์จะแสดงในสองคอลัมน์ ช่วยให้แสดงเนื้อหาได้มากขึ้นบนหน้าจอ คุณต้องรีสตาร์ทแอปพลิเคชันเพื่อให้มีผล</string>
+
+    <!-- AboutActivity -->
+    <string name="title_pref_feedback">ข้อเสนอแนะ</string>
+    <string name="summary_pref_feedback">ส่งข้อเสนอแนะการปรับปรุงหรือข้อบกพร่องไปยัง GitHub</string>
+    <string name="summary_pref_tg_group">เข้าร่วมกลุ่ม Telegram</string>
+    <string name="toast_tg_app_not_found">ไม่พบแอป Telegram</string>
+    <string name="title_privacy_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="title_about">เกี่ยวกับ</string>
+    <string name="title_source_code">ซอร์สโค้ด</string>
+    <string name="title_oss_license">ไลเซนส์โอเพนซอร์ส</string>
+    <string name="title_tg_channel">ช่อง Telegram</string>
+    <string name="title_configuration_backup">สำรองการกำหนดค่า</string>
+    <string name="summary_configuration_backup">ตำแหน่งที่เก็บ: [%s], การสำรองข้อมูลจะถูกล้างหลังจากถอนการติดตั้งแอปหรือล้างพื้นที่จัดเก็บ</string>
+    <string name="title_configuration_restore">กู้คืนการกำหนดค่า</string>
+    <string name="title_configuration_share">แชร์การกำหนดค่า</string>
+
+    <string name="title_pref_promotion">โปรโมชัน</string>
+    <string name="summary_pref_promotion">โปรโมชัน คลิกเพื่อดูรายละเอียด (สามารถลบการบริจาคได้)</string>
+
+    <string name="title_pref_auto_update_subscription">อัปเดตการสมัครสมาชิกอัตโนมัติ</string>
+    <string name="summary_pref_auto_update_subscription">อัปเดตการสมัครสมาชิกของคุณโดยอัตโนมัติตามช่วงเวลาที่กำหนดในพื้นหลัง ขึ้นอยู่กับอุปกรณ์ ฟีเจอร์นี้อาจไม่ทำงานเสมอไป</string>
+    <string name="title_pref_auto_update_interval">ช่วงเวลาอัปเดตอัตโนมัติ (นาที, ค่าต่ำสุด 15)</string>
+
+    <string name="title_core_loglevel">ระดับบันทึก</string>
+    <string name="title_outbound_domain_resolve_method">วิธีการแก้ไขโดเมนเอาต์เบานด์ล่วงหน้า</string>
+    <string name="title_mode">โหมด</string>
+    <string name="title_mode_help">คลิกฉันเพื่อความช่วยเหลือเพิ่มเติม</string>
+    <string name="title_language">ภาษา</string>
+    <string name="title_ui_settings">การตั้งค่า UI</string>
+    <string name="title_pref_ui_mode_night">การตั้งค่าโหมด UI</string>
+    <string name="title_pref_use_hev_tunnel">เปิดใช้งานคุณลักษณะ TUN ใหม่</string>
+    <string name="summary_pref_use_hev_tunnel">เมื่อเปิดใช้งาน TUN จะใช้ hev-socks5-tunnel; มิฉะนั้นจะใช้ badvpn-tun2socks</string>
+    <string name="title_pref_hev_tunnel_loglevel">ระดับบันทึก Hev Tun</string>
+    <string name="title_pref_hev_tunnel_rw_timeout">เวลาเกินการอ่าน/เขียน Hev Tun (ms, ค่าเริ่มต้น 300000)</string>
+
+    <string name="title_logcat">Logcat</string>
+    <string name="logcat_copy">คัดลอก</string>
+    <string name="logcat_clear">ล้าง</string>
+    <string name="title_service_restart">รีสตาร์ทบริการ</string>
+    <string name="title_del_all_config">ลบการกำหนดค่ากลุ่มปัจจุบัน</string>
+    <string name="title_del_duplicate_config">ลบการกำหนดค่าซ้ำกลุ่มปัจจุบัน</string>
+    <string name="title_del_invalid_config">ลบการกำหนดค่าไม่ถูกต้องกลุ่มปัจจุบัน</string>
+    <string name="title_export_all">ส่งออกการกำหนดค่าที่ไม่ใช่แบบกำหนดเองกลุ่มปัจจุบันไปยังคลิปบอร์ด</string>
+    <string name="title_sub_setting">การตั้งค่ากลุ่มสมัครสมาชิก</string>
+    <string name="sub_setting_remarks">หมายเหตุ</string>
+    <string name="sub_setting_url">URL (ไม่บังคับ)</string>
+    <string name="sub_setting_filter">ตัวกรองหมายเหตุปกติ</string>
+    <string name="sub_setting_enable">เปิดใช้งานการอัปเดต</string>
+    <string name="sub_auto_update">เปิดใช้งานการอัปเดตอัตโนมัติ</string>
+    <string name="sub_allow_insecure_url">อนุญาตที่อยู่ HTTP ที่ไม่ปลอดภัย</string>
+    <string name="sub_setting_pre_profile">หมายเหตุการกำหนดค่าพร็อกซี่ก่อนหน้า</string>
+    <string name="sub_setting_next_profile">หมายเหตุการกำหนดค่าพร็อกซี่ถัดไป</string>
+    <string name="sub_setting_pre_profile_tip">หมายเหตุการกำหนดค่ามีอยู่และไม่ซ้ำกัน</string>
+    <string name="title_sub_update">อัปเดตการสมัครสมาชิกกลุ่มปัจจุบัน</string>
+    <string name="title_ping_all_server">Tcping การกำหนดค่ากลุ่มปัจจุบัน</string>
+    <string name="title_real_ping_all_server">ความหน่วงจริงของการกำหนดค่ากลุ่มปัจจุบัน</string>
+    <string name="title_create_intelligent_selection_all_server">กำลังสร้างการเลือกอัจฉริยะการกำหนดค่ากลุ่มปัจจุบัน</string>
+    <string name="title_user_asset_setting">ไฟล์แอสเซต</string>
+    <string name="title_sort_by_test_results">การจัดเรียงตามผลการทดสอบ</string>
+    <string name="title_filter_config">กรองไฟล์การกำหนดค่า</string>
+    <string name="filter_config_all">ทุกกลุ่ม</string>
+    <string name="title_del_duplicate_config_count">ลบการกำหนดค่าซ้ำ %d รายการ</string>
+    <string name="title_del_config_count">ลบการกำหนดค่า %d รายการ</string>
+    <string name="title_import_config_count">นำเข้าการกำหนดค่า %d รายการ</string>
+    <string name="title_export_config_count">ส่งออกการกำหนดค่า %d รายการ</string>
+    <string name="title_update_config_count">อัปเดตการกำหนดค่า %d รายการ</string>
+
+    <string name="tasker_start_service">เริ่มต้นบริการ</string>
+    <string name="tasker_setting_confirm">ยืนยัน</string>
+<!-- RoutingSettingActivity -->
+    <string name="routing_settings_domain_strategy">กลยุทธ์โดเมน</string>
+    <string name="routing_settings_title">การตั้งค่าการกำหนดเส้นทาง</string>
+    <string name="routing_settings_tips">คั่นด้วยเครื่องหมายจุลภาค (,) เลือกโดเมนหรือ ip</string>
+    <string name="routing_settings_save">บันทึก</string>
+    <string name="routing_settings_delete">ล้าง</string>
+  <string name="routing_settings_rule_title">การตั้งค่ากฎการกำหนดเส้นทาง</string>
+    <string name="routing_settings_add_rule">เพิ่มกฎ</string>
+    <string name="routing_settings_import_predefined_rulesets">นำเข้ากฎที่กำหนดไว้ล่วงหน้า</string>
+    <string name="routing_settings_import_rulesets_tip">กฎที่มีอยู่จะถูกลบ คุณแน่ใจที่จะดำเนินการต่อหรือไม่?</string>
+    <string name="routing_settings_import_rulesets_from_clipboard">นำเข้ากฎจากคลิปบอร์ด</string>
+    <string name="routing_settings_import_rulesets_from_qrcode">นำเข้ากฎจาก QRcode</string>
+    <string name="routing_settings_export_rulesets_to_clipboard">ส่งออกกฎไปยังคลิปบอร์ด</string>
+    <string name="routing_settings_locked">ถูกล็อค, รักษากฎนี้เมื่อนำเข้าการตั้งค่าล่วงหน้า</string>
+    <string name="routing_settings_domain" translatable="false">โดเมน</string>
+    <string name="routing_settings_ip" translatable="false">ip</string>
+    <string name="routing_settings_port" translatable="false">พอร์ต</string>
+    <string name="routing_settings_protocol" translatable="false">โปรโตคอล</string>
+    <string name="routing_settings_protocol_tip" translatable="false">[http,tls,bittorrent]</string>
+    <string name="routing_settings_network" translatable="false">เครือข่าย</string>
+    <string name="routing_settings_network_tip" translatable="false">[udp|tcp]</string>
+    <string name="routing_settings_outbound_tag" translatable="false">แท็กเอาต์เบานด์</string>
+
+    <string name="connection_test_pending">ตรวจสอบการเชื่อมต่อ</string>
+    <string name="connection_test_testing">กำลังทดสอบ…</string>
+    <string name="connection_test_testing_count">กำลังทดสอบการกำหนดค่า %d รายการ…</string>
+    <string name="connection_test_available">สำเร็จ: การเชื่อมต่อใช้เวลา %dms</string>
+    <string name="connection_test_error">ล้มเหลวในการตรวจจับการเชื่อมต่ออินเทอร์เน็ต: %s</string>
+    <string name="connection_test_fail">อินเทอร์เน็ตไม่พร้อมใช้งาน</string>
+    <string name="connection_test_error_status_code">รหัสข้อผิดพลาด: #%d</string>
+    <string name="connection_connected">เชื่อมต่อแล้ว แตะเพื่อตรวจสอบการเชื่อมต่อ</string>
+    <string name="connection_not_connected">ไม่ได้เชื่อมต่อ</string>
+
+    <string name="import_subscription_success">นำเข้าการสมัครสมาชิกสำเร็จ</string>
+    <string name="import_subscription_failure">นำเข้าการสมัครสมาชิกล้มเหลว</string>
+    <string name="title_fragment_settings">การตั้งค่า Fragment</string>
+    <string name="title_pref_fragment_packets">แพ็กเก็ต Fragment</string>
+    <string name="title_pref_fragment_length">ความยาว Fragment (ต่ำสุด-สูงสุด)</string>
+    <string name="title_pref_fragment_interval">ช่วงเวลา Fragment (ต่ำสุด-สูงสุด)</string>
+    <string name="title_pref_fragment_enabled">เปิดใช้งาน Fragment</string>
+
+    <string name="update_check_for_update">ตรวจสอบการอัปเดต</string>
+    <string name="update_already_latest_version">เป็นเวอร์ชันล่าสุดแล้ว</string>
+    <string name="update_new_version_found">พบเวอร์ชันใหม่: %s</string>
+    <string name="update_now">อัปเดตตอนนี้</string>
+    <string name="update_check_pre_release">ตรวจสอบ Pre-release</string>
+    <string name="update_checking_for_update">กำลังตรวจสอบการอัปเดต…</string>
+
+    <string-array name="share_method">
+        <item>QRcode</item>
+        <item>ส่งออกไปยังคลิปบอร์ด</item>
+        <item>ส่งออกการกำหนดค่าแบบเต็มไปยังคลิปบอร์ด</item>
+    </string-array>
+
+    <string-array name="share_method_more">
+        <item>QRcode</item>
+        <item>ส่งออกไปยังคลิปบอร์ด</item>
+        <item>ส่งออกการกำหนดค่าแบบเต็มไปยังคลิปบอร์ด</item>
+        <item>แก้ไข</item>
+        <item>ลบ</item>
+    </string-array>
+
+    <string-array name="share_sub_method">
+        <item>QRcode</item>
+        <item>ส่งออกไปยังคลิปบอร์ด</item>
+    </string-array>
+
+    <string-array name="mode_entries">
+        <item>VPN</item>
+        <item>พร็อกซี่เท่านั้น</item>
+    </string-array>
+
+    <string-array name="ui_mode_night">
+        <item>ตามระบบ</item>
+        <item>สว่าง</item>
+        <item>มืด</item>
+    </string-array>
+
+    <string-array name="preset_rulesets">
+        <item>ไวท์ลิสต์จีน</item>
+        <item>แบล็กลิสต์จีน</item>
+        <item>ทั่วโลก</item>
+        <item>ไวท์ลิสต์อิหร่าน</item>
+    </string-array>
+
+    <string-array name="vpn_bypass_lan">
+        <item>ตามการกำหนดค่า</item>
+        <item>บายพาส</item>
+        <item>ไม่บายพาส</item>
+    </string-array>
+
+    <string-array name="outbound_domain_resolve_method">
+        <item>ไม่แก้ไข</item>
+        <item>แก้ไขและเพิ่มลงในโฮสต์ DNS</item>
+        <item>แก้ไขและแทนที่โดเมน</item>
+    </string-array>
+    <string name="intelligent_selection">การเลือกอัจฉริยะ</string>
+    <string name="sub_setting_intelligent_selection_filter">ตัวกรองหมายเหตุการเลือกอัจฉริยะปกติ</string>
+    <string name="title_intelligent_selection_method">วิธีการเลือกอัจฉริยะ</string>
+    <string-array name="intelligent_selection_method">
+        <item>Ping น้อยที่สุด</item>
+        <item>โหลดน้อยที่สุด</item>
+    </string-array>
+    <string name="pre_resolving_domain">กำลังแก้ไขโดเมนล่วงหน้า…</string>
+
+</resources>
