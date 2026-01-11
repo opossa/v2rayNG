@@ -233,7 +233,7 @@
     <string name="title_oss_license">ไลเซนส์โอเพนซอร์ส</string>
     <string name="title_tg_channel">ช่อง Telegram</string>
     <string name="title_configuration_backup">สำรองการกำหนดค่า</string>
-    <string name="summary_configuration_backup">ตำแหน่งที่เก็บ: [%s], การสำรองข้อมูลจะถูกล้างหลังจากถอนการติดตั้งแอปหรือล้างพื้นที่จัดเก็บ</string>
+    
     <string name="title_configuration_restore">กู้คืนการกำหนดค่า</string>
     <string name="title_configuration_share">แชร์การกำหนดค่า</string>
 
