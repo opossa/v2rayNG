@@ -10,10 +10,6 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-    <uses-sdk
-        android:minSdkVersion="21"
-        tools:overrideLibrary="com.blacksquircle.ui.editorkit" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -30,7 +26,7 @@
     <!-- https://developer.android.com/about/versions/11/privacy/package-visibility -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+        tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -53,15 +49,13 @@
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeDayNight"
-        android:usesCleartextTraffic="true"
-        tools:targetApi="m">
+        android:theme="@style/AppThemeDayNight.NoActionBar"
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/AppThemeDayNight.NoActionBar">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,6 +76,10 @@
             android:windowSoftInputMode="stateUnchanged" />
         <activity
             android:name=".ui.ServerCustomConfigActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateUnchanged" />
+        <activity
+            android:name=".ui.ServerGroupActivity"
             android:exported="false"
             android:windowSoftInputMode="stateUnchanged" />
         <activity
@@ -123,7 +121,7 @@
             android:excludeFromRecents="true"
             android:exported="false"
             android:process=":RunSoLibV2RayDaemon"
-            android:theme="@style/AppTheme.NoActionBar.Translucent" />
+            android:theme="@style/AppThemeDayNight.NoActionBar.Translucent" />
 
         <activity
             android:name=".ui.UrlSchemeActivity"
@@ -148,6 +146,9 @@
             android:name=".ui.CheckUpdateActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.BackupActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.AboutActivity"
             android:exported="false" />
 
@@ -158,7 +159,8 @@
             android:foregroundServiceType="specialUse"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_VPN_SERVICE"
-            android:process=":RunSoLibV2RayDaemon">
+            android:process=":RunSoLibV2RayDaemon"
+            tools:ignore="VpnServicePolicy">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
@@ -215,8 +217,7 @@
             android:icon="@drawable/ic_stat_name"
             android:label="@string/app_tile_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            android:process=":RunSoLibV2RayDaemon"
-            tools:targetApi="24">
+            android:process=":RunSoLibV2RayDaemon">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>

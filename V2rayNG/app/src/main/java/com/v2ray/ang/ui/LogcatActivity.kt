@@ -30,9 +30,8 @@ class LogcatActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        title = getString(R.string.title_logcat)
+        //setContentView(binding.root)
+        setContentViewWithToolbar(binding.root, showHomeAsUp = true, title = getString(R.string.title_logcat))
 
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -56,7 +55,7 @@ class LogcatActivity : BaseActivity(), SwipeRefreshLayout.OnRefreshListener {
                 lst.add("-v")
                 lst.add("time")
                 lst.add("-s")
-                lst.add("GoLog,tun2socks,${ANG_PACKAGE},AndroidRuntime,System.err")
+                lst.add("GoLog,${ANG_PACKAGE},AndroidRuntime,System.err")
                 val process = withContext(Dispatchers.IO) {
                     Runtime.getRuntime().exec(lst.toTypedArray())
                 }

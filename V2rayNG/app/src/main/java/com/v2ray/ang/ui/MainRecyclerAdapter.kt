@@ -1,5 +1,6 @@
 package com.v2ray.ang.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.text.TextUtils
@@ -19,6 +20,7 @@ import com.v2ray.ang.databinding.ItemRecyclerFooterBinding
 import com.v2ray.ang.databinding.ItemRecyclerMainBinding
 import com.v2ray.ang.dto.EConfigType
 import com.v2ray.ang.dto.ProfileItem
+import com.v2ray.ang.dto.ServersCache
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.extension.toastError
 import com.v2ray.ang.extension.toastSuccess
@@ -26,9 +28,7 @@ import com.v2ray.ang.handler.AngConfigManager
 import com.v2ray.ang.handler.MmkvManager
 import com.v2ray.ang.helper.ItemTouchHelperAdapter
 import com.v2ray.ang.helper.ItemTouchHelperViewHolder
-import com.v2ray.ang.handler.V2RayServiceManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<MainRecyclerAdapter.BaseViewHolder>(), ItemTouchHelperAdapter {
@@ -46,18 +46,30 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
     }
     var isRunning = false
     private val doubleColumnDisplay = MmkvManager.decodeSettingsBool(AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
+    private var data: MutableList<ServersCache> = mutableListOf()
 
-    /**
-     * Gets the total number of items in the adapter (servers count + footer view)
-     * @return The total item count
-     */
-    override fun getItemCount() = mActivity.mainViewModel.serversCache.size + 1
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(newData: MutableList<ServersCache>?, position: Int = -1) {
+        if (android.os.Looper.myLooper() != android.os.Looper.getMainLooper()) {
+            mActivity.runOnUiThread { setData(newData, position) }
+            return
+        }
+        data = newData?.toMutableList() ?: mutableListOf()
+
+        if (position >= 0 && position in data.indices) {
+            notifyItemChanged(position)
+        } else {
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun getItemCount() = data.size + 1
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         if (holder is MainViewHolder) {
-            val guid = mActivity.mainViewModel.serversCache[position].guid
-            val profile = mActivity.mainViewModel.serversCache[position].profile
-            val isCustom = profile.configType == EConfigType.CUSTOM
+            val guid = data[position].guid
+            val profile = data[position].profile
+            val isCustom = profile.configType == EConfigType.CUSTOM || profile.configType == EConfigType.POLICYGROUP
 
             holder.itemView.setBackgroundColor(Color.TRANSPARENT)
 
@@ -77,7 +89,7 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
 
             //layoutIndicator
             if (guid == MmkvManager.getSelectServer()) {
-                holder.itemMainBinding.layoutIndicator.setBackgroundResource(R.color.colorAccent)
+                holder.itemMainBinding.layoutIndicator.setBackgroundResource(R.color.colorIndicator)
             } else {
                 holder.itemMainBinding.layoutIndicator.setBackgroundResource(0)
             }
@@ -144,14 +156,18 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
      */
     private fun getAddress(profile: ProfileItem): String {
         // Hide xxx:xxx:***/xxx.xxx.xxx.***
-        return "${
-            profile.server?.let {
-                if (it.contains(":"))
-                    it.split(":").take(2).joinToString(":", postfix = ":***")
-                else
-                    it.split('.').dropLast(1).joinToString(".", postfix = ".***")
-            }
-        } : ${profile.serverPort}"
+        val server = profile.server
+        val port = profile.serverPort
+        if (server.isNullOrBlank() && port.isNullOrBlank()) return ""
+
+        val addrPart = server?.let {
+            if (it.contains(":"))
+                it.split(":").take(2).joinToString(":", postfix = ":***")
+            else
+                it.split('.').dropLast(1).joinToString(".", postfix = ".***")
+        } ?: ""
+
+        return "$addrPart : ${port ?: ""}"
     }
 
     /**
@@ -201,6 +217,11 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
     private fun showQRCode(guid: String) {
         val ivBinding = ItemQrcodeBinding.inflate(LayoutInflater.from(mActivity))
         ivBinding.ivQcode.setImageBitmap(AngConfigManager.share2QRCode(guid))
+        if (share_method.isNotEmpty()) {
+            ivBinding.ivQcode.contentDescription = share_method[0]
+        } else {
+            ivBinding.ivQcode.contentDescription = "QR Code"
+        }
         AlertDialog.Builder(mActivity).setView(ivBinding.root).show()
     }
 
@@ -245,6 +266,8 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
             .putExtra("createConfigType", profile.configType.value)
         if (profile.configType == EConfigType.CUSTOM) {
             mActivity.startActivity(intent.setClass(mActivity, ServerCustomConfigActivity::class.java))
+        } else if (profile.configType == EConfigType.POLICYGROUP) {
+            mActivity.startActivity(intent.setClass(mActivity, ServerGroupActivity::class.java))
         } else {
             mActivity.startActivity(intent.setClass(mActivity, ServerActivity::class.java))
         }
@@ -258,7 +281,7 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
      */
     private fun removeServer(guid: String, position: Int) {
         if (guid != MmkvManager.getSelectServer()) {
-            if (MmkvManager.decodeSettingsBool(AppConfig.PREF_CONFIRM_REMOVE) == true) {
+            if (MmkvManager.decodeSettingsBool(AppConfig.PREF_CONFIRM_REMOVE)) {
                 AlertDialog.Builder(mActivity).setMessage(R.string.del_config_comfirm)
                     .setPositiveButton(android.R.string.ok) { _, _ ->
                         removeServerSub(guid, position)
@@ -283,7 +306,7 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
     private fun removeServerSub(guid: String, position: Int) {
         mActivity.mainViewModel.removeServer(guid)
         notifyItemRemoved(position)
-        notifyItemRangeChanged(position, mActivity.mainViewModel.serversCache.size)
+        notifyItemRangeChanged(position, data.size)
     }
 
     /**
@@ -300,15 +323,7 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
             }
             notifyItemChanged(mActivity.mainViewModel.getPosition(guid))
             if (isRunning) {
-                V2RayServiceManager.stopVService(mActivity)
-                mActivity.lifecycleScope.launch {
-                    try {
-                        delay(500)
-                        V2RayServiceManager.startVService(mActivity)
-                    } catch (e: Exception) {
-                        Log.e(AppConfig.TAG, "Failed to restart V2Ray service", e)
-                    }
-                }
+                mActivity.restartV2Ray()
             }
         }
     }
@@ -324,7 +339,7 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == mActivity.mainViewModel.serversCache.size) {
+        return if (position == data.size) {
             VIEW_TYPE_FOOTER
         } else {
             VIEW_TYPE_ITEM

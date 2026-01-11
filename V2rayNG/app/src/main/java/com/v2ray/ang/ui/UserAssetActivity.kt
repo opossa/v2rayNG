@@ -83,8 +83,8 @@ class UserAssetActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        title = getString(R.string.title_user_asset_setting)
+        //setContentView(binding.root)
+        setContentViewWithToolbar(binding.root, showHomeAsUp = true, title = getString(R.string.title_user_asset_setting))
 
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -219,7 +219,7 @@ class UserAssetActivity : BaseActivity() {
     }
 
     private fun downloadGeoFiles() {
-        binding.pbWaiting.show()
+        showLoading()
         toast(R.string.msg_downloading_content)
 
         val httpPort = SettingsManager.getHttpPort()
@@ -247,7 +247,7 @@ class UserAssetActivity : BaseActivity() {
                 } else {
                     toast(getString(R.string.toast_failure))
                 }
-                binding.pbWaiting.hide()
+                hideLoading()
             }
         }
     }

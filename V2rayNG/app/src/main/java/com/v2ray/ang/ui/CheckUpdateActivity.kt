@@ -24,9 +24,8 @@ class CheckUpdateActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        title = getString(R.string.update_check_for_update)
+        //setContentView(binding.root)
+        setContentViewWithToolbar(binding.root, showHomeAsUp = true, title = getString(R.string.update_check_for_update))
 
         binding.layoutCheckUpdate.setOnClickListener {
             checkForUpdates(binding.checkPreRelease.isChecked)
@@ -46,6 +45,7 @@ class CheckUpdateActivity : BaseActivity() {
 
     private fun checkForUpdates(includePreRelease: Boolean) {
         toast(R.string.update_checking_for_update)
+        showLoading()
 
         lifecycleScope.launch {
             try {
@@ -58,6 +58,9 @@ class CheckUpdateActivity : BaseActivity() {
             } catch (e: Exception) {
                 Log.e(AppConfig.TAG, "Failed to check for updates: ${e.message}")
                 toastError(e.message ?: getString(R.string.toast_failure))
+            }
+            finally {
+                hideLoading()
             }
         }
     }

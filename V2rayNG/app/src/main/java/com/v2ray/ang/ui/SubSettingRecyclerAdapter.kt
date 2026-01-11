@@ -16,6 +16,7 @@ import com.v2ray.ang.databinding.ItemQrcodeBinding
 import com.v2ray.ang.databinding.ItemRecyclerSubSettingBinding
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.handler.MmkvManager
+import com.v2ray.ang.handler.SettingsChangeManager
 import com.v2ray.ang.handler.SettingsManager
 import com.v2ray.ang.helper.ItemTouchHelperAdapter
 import com.v2ray.ang.helper.ItemTouchHelperViewHolder
@@ -40,6 +41,7 @@ class SubSettingRecyclerAdapter(val activity: SubSettingActivity) : RecyclerView
         holder.itemSubSettingBinding.tvName.text = subItem.remarks
         holder.itemSubSettingBinding.tvUrl.text = subItem.url
         holder.itemSubSettingBinding.chkEnable.isChecked = subItem.enabled
+        holder.itemSubSettingBinding.tvLastUpdated.text = Utils.formatTimestamp(subItem.lastUpdated)
         holder.itemView.setBackgroundColor(Color.TRANSPARENT)
 
         holder.itemSubSettingBinding.layoutEdit.setOnClickListener {
@@ -64,10 +66,12 @@ class SubSettingRecyclerAdapter(val activity: SubSettingActivity) : RecyclerView
             holder.itemSubSettingBinding.layoutUrl.visibility = View.GONE
             holder.itemSubSettingBinding.layoutShare.visibility = View.INVISIBLE
             holder.itemSubSettingBinding.chkEnable.visibility = View.INVISIBLE
+            holder.itemSubSettingBinding.layoutLastUpdated.visibility = View.INVISIBLE
         } else {
             holder.itemSubSettingBinding.layoutUrl.visibility = View.VISIBLE
             holder.itemSubSettingBinding.layoutShare.visibility = View.VISIBLE
             holder.itemSubSettingBinding.chkEnable.visibility = View.VISIBLE
+            holder.itemSubSettingBinding.layoutLastUpdated.visibility = View.VISIBLE
             holder.itemSubSettingBinding.layoutShare.setOnClickListener {
                 AlertDialog.Builder(mActivity)
                     .setItems(share_method.asList().toTypedArray()) { _, i ->
@@ -100,7 +104,7 @@ class SubSettingRecyclerAdapter(val activity: SubSettingActivity) : RecyclerView
     }
 
     private fun removeSubscription(subId: String, position: Int) {
-        if (MmkvManager.decodeSettingsBool(AppConfig.PREF_CONFIRM_REMOVE) == true) {
+        if (MmkvManager.decodeSettingsBool(AppConfig.PREF_CONFIRM_REMOVE)) {
             AlertDialog.Builder(mActivity).setMessage(R.string.del_config_comfirm)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
                     removeSubscriptionSub(subId, position)
@@ -121,6 +125,7 @@ class SubSettingRecyclerAdapter(val activity: SubSettingActivity) : RecyclerView
                 notifyItemRemoved(position)
                 notifyItemRangeChanged(position, mActivity.subscriptions.size)
                 mActivity.refreshData()
+                SettingsChangeManager.makeSetupGroupTab()
             }
         }
     }
@@ -156,6 +161,7 @@ class SubSettingRecyclerAdapter(val activity: SubSettingActivity) : RecyclerView
 
     override fun onItemMoveCompleted() {
         mActivity.refreshData()
+        SettingsChangeManager.makeSetupGroupTab()
     }
 
     override fun onItemDismiss(position: Int) {

@@ -25,8 +25,8 @@ class RoutingEditActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        title = getString(R.string.routing_settings_rule_title)
+        //setContentView(binding.root)
+        setContentViewWithToolbar(binding.root, showHomeAsUp = true, title = getString(R.string.routing_settings_rule_title))
 
         val rulesetItem = SettingsManager.getRoutingRuleset(position)
         if (rulesetItem != null) {
@@ -106,10 +106,10 @@ class RoutingEditActivity : BaseActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.action_server, menu)
-        val del_config = menu.findItem(R.id.del_config)
+        val delConfig = menu.findItem(R.id.del_config)
 
         if (position < 0) {
-            del_config?.isVisible = false
+            delConfig?.isVisible = false
         }
 
         return super.onCreateOptionsMenu(menu)

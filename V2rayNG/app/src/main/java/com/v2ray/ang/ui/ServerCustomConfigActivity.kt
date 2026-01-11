@@ -31,8 +31,8 @@ class ServerCustomConfigActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        title = getString(R.string.title_server)
+        //setContentView(binding.root)
+        setContentViewWithToolbar(binding.root, showHomeAsUp = true, title = EConfigType.CUSTOM.toString())
 
         if (!Utils.getDarkModeStatus(this)) {
             binding.editor.colorScheme = EditorTheme.INTELLIJ_LIGHT

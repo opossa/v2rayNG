@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.handler.MmkvManager
+import com.v2ray.ang.handler.SettingsChangeManager
 import com.v2ray.ang.handler.SettingsManager
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application),
@@ -47,11 +48,11 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             AppConfig.PREF_DOMESTIC_DNS,
             AppConfig.PREF_DNS_HOSTS,
             AppConfig.PREF_DELAY_TEST_URL,
+            AppConfig.PREF_IP_API_URL,
             AppConfig.PREF_LOCAL_DNS_PORT,
             AppConfig.PREF_SOCKS_PORT,
             AppConfig.PREF_LOGLEVEL,
             AppConfig.PREF_OUTBOUND_DOMAIN_RESOLVE_METHOD,
-            AppConfig.PREF_INTELLIGENT_SELECTION_METHOD,
             AppConfig.PREF_LANGUAGE,
             AppConfig.PREF_UI_MODE_NIGHT,
             AppConfig.PREF_ROUTING_DOMAIN_STRATEGY,
@@ -100,5 +101,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         if (key == AppConfig.PREF_UI_MODE_NIGHT) {
             SettingsManager.setNightMode()
         }
+        SettingsChangeManager.makeRestartService()
     }
 }

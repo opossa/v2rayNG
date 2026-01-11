@@ -53,7 +53,7 @@ object SettingsManager {
             return null
         }
 
-        return JsonUtil.fromJson(assets, Array<RulesetItem>::class.java).toMutableList()
+        return JsonUtil.fromJson(assets, Array<RulesetItem>::class.java)?.toMutableList()
     }
 
     /**
@@ -77,7 +77,7 @@ object SettingsManager {
         }
 
         try {
-            val rulesetList = JsonUtil.fromJson(content, Array<RulesetItem>::class.java).toMutableList()
+            val rulesetList = JsonUtil.fromJson(content, Array<RulesetItem>::class.java)?.toMutableList()
             if (rulesetList.isNullOrEmpty()) {
                 return false
             }
@@ -172,7 +172,7 @@ object SettingsManager {
         if (config.configType == EConfigType.CUSTOM) {
             val raw = MmkvManager.decodeServerRaw(guid) ?: return false
             val v2rayConfig = JsonUtil.fromJson(raw, V2rayConfig::class.java)
-            val exist = v2rayConfig.routing.rules.filter { it.outboundTag == TAG_DIRECT }.any {
+            val exist = v2rayConfig?.routing?.rules?.filter { it.outboundTag == TAG_DIRECT }?.any {
                 it.domain?.contains(GEOSITE_PRIVATE) == true || it.ip?.contains(GEOIP_PRIVATE) == true
             }
             return exist == true
@@ -205,7 +205,7 @@ object SettingsManager {
      */
     fun swapSubscriptions(fromPosition: Int, toPosition: Int) {
         val subsList = MmkvManager.decodeSubsList()
-        if (subsList.isNullOrEmpty()) return
+        if (subsList.isEmpty()) return
 
         Collections.swap(subsList, fromPosition, toPosition)
         MmkvManager.encodeSubsList(subsList)
@@ -338,12 +338,12 @@ object SettingsManager {
             Language.ENGLISH -> Locale.ENGLISH
             Language.CHINA -> Locale.CHINA
             Language.TRADITIONAL_CHINESE -> Locale.TRADITIONAL_CHINESE
-            Language.VIETNAMESE -> Locale("vi")
-            Language.RUSSIAN -> Locale("ru")
-            Language.PERSIAN -> Locale("fa")
-            Language.ARABIC -> Locale("ar")
-            Language.BANGLA -> Locale("bn")
-            Language.BAKHTIARI -> Locale("bqi", "IR")
+            Language.VIETNAMESE -> Locale.forLanguageTag("vi")
+            Language.RUSSIAN -> Locale.forLanguageTag("ru")
+            Language.PERSIAN -> Locale.forLanguageTag("fa")
+            Language.ARABIC -> Locale.forLanguageTag("ar")
+            Language.BANGLA -> Locale.forLanguageTag("bn")
+            Language.BAKHTIARI -> Locale.forLanguageTag("bqi-IR")
         }
     }
 
@@ -376,5 +376,32 @@ object SettingsManager {
      */
     fun getVpnMtu(): Int {
         return Utils.parseInt(MmkvManager.decodeSettingsString(AppConfig.PREF_VPN_MTU), AppConfig.VPN_MTU)
+    }
+
+    /**
+     * Ensure default settings are present in MMKV.
+     */
+    fun ensureDefaultSettings() {
+        // Write defaults in the exact order requested by the user
+        ensureDefaultValue(AppConfig.PREF_MODE, AppConfig.VPN)
+        ensureDefaultValue(AppConfig.PREF_VPN_DNS, AppConfig.DNS_VPN)
+        ensureDefaultValue(AppConfig.PREF_VPN_MTU, AppConfig.VPN_MTU.toString())
+        ensureDefaultValue(AppConfig.SUBSCRIPTION_AUTO_UPDATE_INTERVAL, AppConfig.SUBSCRIPTION_DEFAULT_UPDATE_INTERVAL)
+        ensureDefaultValue(AppConfig.PREF_SOCKS_PORT, AppConfig.PORT_SOCKS)
+        ensureDefaultValue(AppConfig.PREF_REMOTE_DNS, AppConfig.DNS_PROXY)
+        ensureDefaultValue(AppConfig.PREF_DOMESTIC_DNS, AppConfig.DNS_DIRECT)
+        ensureDefaultValue(AppConfig.PREF_DELAY_TEST_URL, AppConfig.DELAY_TEST_URL)
+        ensureDefaultValue(AppConfig.PREF_IP_API_URL, AppConfig.IP_API_URL)
+        ensureDefaultValue(AppConfig.PREF_HEV_TUNNEL_RW_TIMEOUT, AppConfig.HEVTUN_RW_TIMEOUT)
+        ensureDefaultValue(AppConfig.PREF_MUX_CONCURRENCY, "8")
+        ensureDefaultValue(AppConfig.PREF_MUX_XUDP_CONCURRENCY, "8")
+        ensureDefaultValue(AppConfig.PREF_FRAGMENT_LENGTH, "50-100")
+        ensureDefaultValue(AppConfig.PREF_FRAGMENT_INTERVAL, "10-20")
+    }
+
+    private fun ensureDefaultValue(key: String, default: String) {
+        if (MmkvManager.decodeSettingsString(key).isNullOrEmpty()) {
+            MmkvManager.encodeSettings(key, default)
+        }
     }
 }
