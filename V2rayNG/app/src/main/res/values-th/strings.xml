@@ -238,8 +238,7 @@
     <string name="title_configuration_share">แชร์การกำหนดค่า</string>
 
     <string name="title_pref_promotion">โปรโมชัน</string>
-    <string name="summary_pref_promotion">โปรโมชัน คลิกเพื่อดูรายละเอียด (สามารถลบการบริจาคได้)</string>
-
+    
     <string name="title_pref_auto_update_subscription">อัปเดตการสมัครสมาชิกอัตโนมัติ</string>
     <string name="summary_pref_auto_update_subscription">อัปเดตการสมัครสมาชิกของคุณโดยอัตโนมัติตามช่วงเวลาที่กำหนดในพื้นหลัง ขึ้นอยู่กับอุปกรณ์ ฟีเจอร์นี้อาจไม่ทำงานเสมอไป</string>
     <string name="title_pref_auto_update_interval">ช่วงเวลาอัปเดตอัตโนมัติ (นาที, ค่าต่ำสุด 15)</string>
