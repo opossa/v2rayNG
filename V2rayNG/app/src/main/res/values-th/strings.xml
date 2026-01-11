@@ -276,7 +276,7 @@
     <string name="title_sub_update">อัปเดตการสมัครสมาชิกกลุ่มปัจจุบัน</string>
     <string name="title_ping_all_server">Tcping การกำหนดค่ากลุ่มปัจจุบัน</string>
     <string name="title_real_ping_all_server">ความหน่วงจริงของการกำหนดค่ากลุ่มปัจจุบัน</string>
-    <string name="title_create_intelligent_selection_all_server">กำลังสร้างการเลือกอัจฉริยะการกำหนดค่ากลุ่มปัจจุบัน</string>
+
     <string name="title_user_asset_setting">ไฟล์แอสเซต</string>
     <string name="title_sort_by_test_results">การจัดเรียงตามผลการทดสอบ</string>
     <string name="title_filter_config">กรองไฟล์การกำหนดค่า</string>
