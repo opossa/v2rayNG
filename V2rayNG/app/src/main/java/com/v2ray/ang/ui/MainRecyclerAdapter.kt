@@ -30,6 +30,7 @@ import com.v2ray.ang.helper.ItemTouchHelperAdapter
 import com.v2ray.ang.helper.ItemTouchHelperViewHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Collections
 
 class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<MainRecyclerAdapter.BaseViewHolder>(), ItemTouchHelperAdapter {
     companion object {
@@ -280,21 +281,22 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
      * @param position The position in the list
      */
     private fun removeServer(guid: String, position: Int) {
-        if (guid != MmkvManager.getSelectServer()) {
-            if (MmkvManager.decodeSettingsBool(AppConfig.PREF_CONFIRM_REMOVE)) {
-                AlertDialog.Builder(mActivity).setMessage(R.string.del_config_comfirm)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        removeServerSub(guid, position)
-                    }
-                    .setNegativeButton(android.R.string.cancel) { _, _ ->
-                        //do noting
-                    }
-                    .show()
-            } else {
-                removeServerSub(guid, position)
-            }
-        } else {
+        if (guid == MmkvManager.getSelectServer()) {
             application.toast(R.string.toast_action_not_allowed)
+            return
+        }
+
+        if (MmkvManager.decodeSettingsBool(AppConfig.PREF_CONFIRM_REMOVE)) {
+            AlertDialog.Builder(mActivity).setMessage(R.string.del_config_comfirm)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    removeServerSub(guid, position)
+                }
+                .setNegativeButton(android.R.string.cancel) { _, _ ->
+                    //do noting
+                }
+                .show()
+        } else {
+            removeServerSub(guid, position)
         }
     }
 
@@ -305,8 +307,12 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
      */
     private fun removeServerSub(guid: String, position: Int) {
         mActivity.mainViewModel.removeServer(guid)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, data.size)
+        val idx = data.indexOfFirst { it.guid == guid }
+        if (idx >= 0) {
+            data.removeAt(idx)
+            notifyItemRemoved(idx)
+            notifyItemRangeChanged(idx, data.size - idx)
+        }
     }
 
     /**
@@ -364,6 +370,9 @@ class MainRecyclerAdapter(val activity: MainActivity) : RecyclerView.Adapter<Mai
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         mActivity.mainViewModel.swapServer(fromPosition, toPosition)
+        if (fromPosition < data.size && toPosition < data.size) {
+            Collections.swap(data, fromPosition, toPosition)
+        }
         notifyItemMoved(fromPosition, toPosition)
         return true
     }

@@ -25,10 +25,10 @@ import java.net.ServerSocket
 import java.net.URI
 import java.net.URLDecoder
 import java.net.URLEncoder
-import java.util.Locale
-import java.util.UUID
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 object Utils {
 
@@ -371,24 +371,6 @@ object Utils {
                 ?: context.getDir(AppConfig.DIR_ASSETS, 0).absolutePath
         } catch (e: Exception) {
             Log.e(AppConfig.TAG, "Failed to get user asset path", e)
-            ""
-        }
-    }
-
-    /**
-     * Get the path to the backup directory.
-     *
-     * @param context The context to use.
-     * @return The path to the backup directory.
-     */
-    fun backupPath(context: Context?): String {
-        if (context == null) return ""
-
-        return try {
-            context.getExternalFilesDir(AppConfig.DIR_BACKUPS)?.absolutePath
-                ?: context.getDir(AppConfig.DIR_BACKUPS, 0).absolutePath
-        } catch (e: Exception) {
-            Log.e(AppConfig.TAG, "Failed to get backup path", e)
             ""
         }
     }

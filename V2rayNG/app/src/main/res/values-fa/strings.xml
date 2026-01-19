@@ -131,7 +131,8 @@
     <string name="msg_dialog_progress">بارگذاری</string>
     <string name="menu_item_search">جستجو</string>
     <string name="menu_item_select_all">انتخاب همه</string>
-    <string name="msg_enter_keywords">کلیدواژه‌ ها را وارد کنید</string>
+    <string name="menu_item_invert_selection">Invert selection</string>
+    <string name="msg_enter_keywords">کلمه ی کلیدی را وارد نمایید</string>
     <string name="switch_bypass_apps_mode">حالت دور زدن</string>
     <string name="menu_item_select_proxy_app">انتخاب خودکار پروکسی برنامه</string>
     <string name="msg_downloading_content">در حال دانلود محتوا</string>
@@ -149,6 +150,11 @@
     <string name="summary_pref_per_app_proxy">عمومی: برنامه انتخاب شده از طریق یک پروکسی متصل می شود، برنامه انتخاب نشده مستقیماً متصل می شود. \nحالت دور زدن: برنامه انتخاب شده مستقیماً متصل می شود، برنامه انتخاب نشده از طریق یک پروکسی متصل می شود. \nانتخاب خودکار برنامه های پراکسی در منو امکان پذیر است.</string>
     <string name="title_pref_is_booted">اتصال خودکار هنگام راه اندازی</string>
     <string name="summary_pref_is_booted">هنگام راه اندازی به طور خودکار به سرور انتخابی متصل می شود که ممکن است ناموفق باشد.</string>
+
+    <string name="title_pref_auto_remove_invalid_after_test">Auto delete invalid config after testing</string>
+    <string name="summary_pref_auto_remove_invalid_after_test">Test results may not be accurate; deleted config cannot be recovered.</string>
+    <string name="title_pref_auto_sort_after_test">Auto sort after testing</string>
+    <string name="summary_pref_auto_sort_after_test">Test results may not be accurate;</string>
 
     <string name="title_mux_settings">تنظیمات MUX</string>
     <string name="title_pref_mux_enabled">فعال کردن MUX</string>
@@ -249,8 +255,8 @@
     <string name="title_language">زبان</string>
     <string name="title_ui_settings">تنظیمات رابط کاربری</string>
     <string name="title_pref_ui_mode_night">تنظیمات حالت رابط کاربری</string>
-    <string name="title_pref_use_hev_tunnel">فعالسازی قابلیت TUN جدید</string>
-    <string name="summary_pref_use_hev_tunnel">در صورت فعال بودن، TUN از hev-socks5-tunnel استفاده می‌کند؛ در غیر این صورت از badvpn-tun2socks.</string>
+    <string name="title_pref_use_hev_tunnel">Enable Hev TUN Feature</string>
+    <string name="summary_pref_use_hev_tunnel">When enabled, TUN will use hev-socks5-tunnel; otherwise, it will use xray-core.</string>
     <string name="title_pref_hev_tunnel_loglevel">سطح گزارشات Hev Tun</string>
     <string name="title_pref_hev_tunnel_rw_timeout">زمان انتظار خواندن/نوشتن Hev Tun (ثانیه) (پیش‌فرض tcp,udp 300،60)</string>
 
@@ -279,7 +285,7 @@
     <string name="title_user_asset_setting">فایل های منبع جغرافیایی</string>
     <string name="title_sort_by_test_results">مرتب‌ سازی بر اساس نتایج آزمایش</string>
     <string name="title_filter_config">فیلتر کردن کانفیگ‌ها</string>
-    <string name="filter_config_all">همه گروه‌های اشتراک</string>
+    <string name="filter_config_all">All</string>
     <string name="title_del_duplicate_config_count">حذف %d کانفیگ تکراری</string>
 
     <string name="title_del_config_count">حذف %d کانفیگ</string>
@@ -391,6 +397,7 @@
         <item>لیست سیاه چین</item>
         <item>جهانی(GLOBAL)</item>
         <item>ایران</item>
+        <item>لیست سفید روسیه</item>
     </string-array>
 
     <string-array name="vpn_bypass_lan">

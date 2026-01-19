@@ -33,6 +33,23 @@
         "tls"
       ]
     }
+  },
+  {
+    "tag": "tun",
+    "port": 0,
+    "protocol": "tun",
+    "settings": {
+      "name": "xray0",
+      "MTU": 1500,
+      "userLevel": 8
+    },
+    "sniffing": {
+      "enabled": true,
+      "destOverride": [
+        "http",
+        "tls"
+      ]
+    }
   }
 ],
   "outbounds": [{
