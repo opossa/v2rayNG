@@ -5,6 +5,7 @@ import com.v2ray.ang.AppConfig.PORT_SOCKS
 import com.v2ray.ang.AppConfig.TAG_BLOCKED
 import com.v2ray.ang.AppConfig.TAG_DIRECT
 import com.v2ray.ang.AppConfig.TAG_PROXY
+import com.v2ray.ang.enums.EConfigType
 import com.v2ray.ang.util.Utils
 
 data class ProfileItem(
@@ -14,6 +15,7 @@ data class ProfileItem(
     var addedTime: Long = System.currentTimeMillis(),
 
     var remarks: String = "",
+    var description: String? = null,
     var server: String? = null,
     var serverPort: String? = null,
 
@@ -42,6 +44,7 @@ data class ProfileItem(
     var insecure: Boolean? = null,
     var echConfigList: String? = null,
     var echForceQuery: String? = null,
+    var pinnedCA256: String? = null,
 
     var publicKey: String? = null,
     var shortId: String? = null,

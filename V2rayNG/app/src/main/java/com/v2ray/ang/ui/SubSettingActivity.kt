@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.R
+import com.v2ray.ang.contracts.BaseAdapterListener
 import com.v2ray.ang.databinding.ActivitySubSettingBinding
 import com.v2ray.ang.databinding.ItemQrcodeBinding
 import com.v2ray.ang.extension.toast
@@ -103,7 +104,7 @@ class SubSettingActivity : BaseActivity() {
     }
 
     private inner class ActivityAdapterListener : BaseAdapterListener {
-        override fun onEdit(guid: String) {
+        override fun onEdit(guid: String, position: Int) {
             startActivity(
                 Intent(ownerActivity, SubEditActivity::class.java)
                     .putExtra("subId", guid)

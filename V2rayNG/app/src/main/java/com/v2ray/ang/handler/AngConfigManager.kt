@@ -7,8 +7,9 @@ import android.util.Log
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.AppConfig.HY2
 import com.v2ray.ang.R
-import com.v2ray.ang.dto.EConfigType
+import com.v2ray.ang.enums.EConfigType
 import com.v2ray.ang.dto.ProfileItem
+import com.v2ray.ang.dto.SubscriptionCache
 import com.v2ray.ang.dto.SubscriptionItem
 import com.v2ray.ang.fmt.CustomFmt
 import com.v2ray.ang.fmt.Hysteria2Fmt
@@ -270,13 +271,14 @@ object AngConfigManager {
         ) {
             try {
                 val serverList: Array<Any> =
-                    JsonUtil.fromJson(server, Array<Any>::class.java)?: arrayOf()
+                    JsonUtil.fromJson(server, Array<Any>::class.java) ?: arrayOf()
 
                 if (serverList.isNotEmpty()) {
                     var count = 0
                     for (srv in serverList.reversed()) {
                         val config = CustomFmt.parse(JsonUtil.toJson(srv)) ?: continue
                         config.subscriptionId = subid
+                        config.description = generateDescription(config)
                         val key = MmkvManager.encodeServerConfig("", config)
                         MmkvManager.encodeServerRaw(key, JsonUtil.toJsonPretty(srv) ?: "")
                         count += 1
@@ -291,6 +293,7 @@ object AngConfigManager {
                 // For compatibility
                 val config = CustomFmt.parse(server) ?: return 0
                 config.subscriptionId = subid
+                config.description = generateDescription(config)
                 val key = MmkvManager.encodeServerConfig("", config)
                 MmkvManager.encodeServerRaw(key, server)
                 return 1
@@ -301,6 +304,7 @@ object AngConfigManager {
         } else if (server.startsWith("[Interface]") && server.contains("[Peer]")) {
             try {
                 val config = WireguardFmt.parseWireguardConfFile(server) ?: return R.string.toast_incorrect_protocol
+                config.description = generateDescription(config)
                 val key = MmkvManager.encodeServerConfig("", config)
                 MmkvManager.encodeServerRaw(key, server)
                 return 1
@@ -362,6 +366,7 @@ object AngConfigManager {
             }
 
             config.subscriptionId = subid
+            config.description = generateDescription(config)
             val guid = MmkvManager.encodeServerConfig("", config)
             if (removedSelectedServer != null &&
                 config.server == removedSelectedServer.server && config.serverPort == removedSelectedServer.serverPort
@@ -399,28 +404,28 @@ object AngConfigManager {
      * @param it The subscription item.
      * @return The number of configurations updated.
      */
-    fun updateConfigViaSub(it: Pair<String, SubscriptionItem>): Int {
+    fun updateConfigViaSub(it: SubscriptionCache): Int {
         try {
-            if (TextUtils.isEmpty(it.first)
-                || TextUtils.isEmpty(it.second.remarks)
-                || TextUtils.isEmpty(it.second.url)
+            if (TextUtils.isEmpty(it.guid)
+                || TextUtils.isEmpty(it.subscription.remarks)
+                || TextUtils.isEmpty(it.subscription.url)
             ) {
                 return 0
             }
-            if (!it.second.enabled) {
+            if (!it.subscription.enabled) {
                 return 0
             }
-            val url = HttpUtil.toIdnUrl(it.second.url)
+            val url = HttpUtil.toIdnUrl(it.subscription.url)
             if (!Utils.isValidUrl(url)) {
                 return 0
             }
-            if (!it.second.allowInsecureUrl) {
+            if (!it.subscription.allowInsecureUrl) {
                 if (!Utils.isValidSubUrl(url)) {
                     return 0
                 }
             }
             Log.i(AppConfig.TAG, url)
-            val userAgent = it.second.userAgent
+            val userAgent = it.subscription.userAgent
 
             var configText = try {
                 val httpPort = SettingsManager.getHttpPort()
@@ -440,11 +445,11 @@ object AngConfigManager {
             if (configText.isEmpty()) {
                 return 0
             }
-            val count = parseConfigViaSub(configText, it.first, false)
+            val count = parseConfigViaSub(configText, it.guid, false)
             if (count > 0) {
-                it.second.lastUpdated = System.currentTimeMillis()
-                MmkvManager.encodeSubscription(it.first, it.second)
-                Log.i(AppConfig.TAG, "Subscription updated: ${it.second.remarks}, $count configs")
+                it.subscription.lastUpdated = System.currentTimeMillis()
+                MmkvManager.encodeSubscription(it.guid, it.subscription)
+                Log.i(AppConfig.TAG, "Subscription updated: ${it.subscription.remarks}, $count configs")
             }
             return count
         } catch (e: Exception) {
@@ -481,7 +486,7 @@ object AngConfigManager {
     private fun importUrlAsSubscription(url: String): Int {
         val subscriptions = MmkvManager.decodeSubscriptions()
         subscriptions.forEach {
-            if (it.second.url == url) {
+            if (it.subscription.url == url) {
                 return 0
             }
         }
@@ -491,5 +496,26 @@ object AngConfigManager {
         subItem.url = url
         MmkvManager.encodeSubscription("", subItem)
         return 1
+    }
+
+    /** Generates a description for the profile.
+     *
+     * @param profile The profile item.
+     * @return The generated description.
+     */
+    fun generateDescription(profile: ProfileItem): String {
+        // Hide xxx:xxx:***/xxx.xxx.xxx.***
+        val server = profile.server
+        val port = profile.serverPort
+        if (server.isNullOrBlank() && port.isNullOrBlank()) return ""
+
+        val addrPart = server?.let {
+            if (it.contains(":"))
+                it.split(":").take(2).joinToString(":", postfix = ":***")
+            else
+                it.split('.').dropLast(1).joinToString(".", postfix = ".***")
+        } ?: ""
+
+        return "$addrPart : ${port ?: ""}"
     }
 }

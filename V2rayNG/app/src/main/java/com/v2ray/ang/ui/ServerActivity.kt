@@ -20,12 +20,13 @@ import com.v2ray.ang.AppConfig.TLS
 import com.v2ray.ang.AppConfig.WIREGUARD_LOCAL_ADDRESS_V4
 import com.v2ray.ang.AppConfig.WIREGUARD_LOCAL_MTU
 import com.v2ray.ang.R
-import com.v2ray.ang.dto.EConfigType
-import com.v2ray.ang.dto.NetworkType
+import com.v2ray.ang.enums.EConfigType
+import com.v2ray.ang.enums.NetworkType
 import com.v2ray.ang.dto.ProfileItem
 import com.v2ray.ang.extension.isNotNullEmpty
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.extension.toastSuccess
+import com.v2ray.ang.handler.AngConfigManager
 import com.v2ray.ang.handler.MmkvManager
 import com.v2ray.ang.util.JsonUtil
 import com.v2ray.ang.util.Utils
@@ -137,6 +138,8 @@ class ServerActivity : BaseActivity() {
     private val container_ech_config_list: LinearLayout? by lazy { findViewById(R.id.lay_ech_config_list) }
     private val sp_ech_force_query: Spinner? by lazy { findViewById(R.id.sp_ech_force_query) }
     private val container_ech_force_query: LinearLayout? by lazy { findViewById(R.id.lay_ech_force_query) }
+    private val et_pinned_ca256: EditText? by lazy { findViewById(R.id.et_pinned_ca256) }
+    private val container_pinned_ca256: LinearLayout? by lazy { findViewById(R.id.lay_pinned_ca256) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -274,7 +277,8 @@ class ServerActivity : BaseActivity() {
                             container_spider_x,
                             container_mldsa65_verify,
                             container_ech_config_list,
-                            container_ech_force_query
+                            container_ech_force_query,
+                            container_pinned_ca256
                         ).forEach { it?.visibility = View.GONE }
                     }
 
@@ -286,7 +290,8 @@ class ServerActivity : BaseActivity() {
                             container_alpn,
                             container_allow_insecure,
                             container_ech_config_list,
-                            container_ech_force_query
+                            container_ech_force_query,
+                            container_pinned_ca256
                         ).forEach { it?.visibility = View.VISIBLE }
                         listOf(
                             container_public_key,
@@ -306,7 +311,8 @@ class ServerActivity : BaseActivity() {
                             container_alpn,
                             container_allow_insecure,
                             container_ech_config_list,
-                            container_ech_force_query
+                            container_ech_force_query,
+                            container_pinned_ca256
                         ).forEach { it?.visibility = View.GONE }
                         listOf(
                             container_public_key,
@@ -394,6 +400,7 @@ class ServerActivity : BaseActivity() {
                     val index = Utils.arrayFind(echForceQuerys, it)
                     index.let { sp_ech_force_query?.setSelection(if (it >= 0) it else 0) }
                 }
+                et_pinned_ca256?.text = Utils.getEditable(config.pinnedCA256)
             } else if (config.security == REALITY) {
                 et_public_key?.text = Utils.getEditable(config.publicKey.orEmpty())
                 et_short_id?.text = Utils.getEditable(config.shortId.orEmpty())
@@ -488,6 +495,8 @@ class ServerActivity : BaseActivity() {
         saveStreamSettings(config)
         saveTls(config)
 
+        config.description = AngConfigManager.generateDescription(config)
+
         if (config.subscriptionId.isEmpty() && !subscriptionId.isNullOrEmpty()) {
             config.subscriptionId = subscriptionId.orEmpty()
         }
@@ -566,6 +575,7 @@ class ServerActivity : BaseActivity() {
         val mldsa65Verify = et_mldsa65_verify?.text?.toString()
         val echConfigList = et_ech_config_list?.text?.toString()
         val echForceQueryIndex = sp_ech_force_query?.selectedItemPosition ?: 0
+        val pinnedCA256 = et_pinned_ca256?.text?.toString()
 
         val allowInsecure =
             if (allowInsecureField == null || allowinsecures[allowInsecureField].isBlank()) {
@@ -585,6 +595,7 @@ class ServerActivity : BaseActivity() {
         config.mldsa65Verify = mldsa65Verify
         config.echConfigList = echConfigList
         config.echForceQuery = echForceQuerys[echForceQueryIndex]
+        config.pinnedCA256 = pinnedCA256
     }
 
     private fun transportTypes(network: String?): Array<out String> {
@@ -632,7 +643,7 @@ class ServerActivity : BaseActivity() {
                     finish()
                 }
             } else {
-                application.toast(R.string.toast_action_not_allowed)
+                toast(R.string.toast_action_not_allowed)
             }
         }
         return true
