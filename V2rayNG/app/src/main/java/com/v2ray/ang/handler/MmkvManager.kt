@@ -1,6 +1,7 @@
 package com.v2ray.ang.handler
 
 import com.tencent.mmkv.MMKV
+import com.v2ray.ang.AppConfig.DEFAULT_SUBSCRIPTION_ID
 import com.v2ray.ang.AppConfig.PREF_IS_BOOTED
 import com.v2ray.ang.AppConfig.PREF_ROUTING_RULESET
 import com.v2ray.ang.dto.AssetUrlCache
@@ -18,7 +19,6 @@ object MmkvManager {
 
     //region private
 
-    //private const val ID_PROFILE_CONFIG = "PROFILE_CONFIG"
     private const val ID_MAIN = "MAIN"
     private const val ID_PROFILE_FULL_CONFIG = "PROFILE_FULL_CONFIG"
     private const val ID_SERVER_RAW = "SERVER_RAW"
@@ -28,10 +28,10 @@ object MmkvManager {
     private const val ID_SETTING = "SETTING"
     private const val KEY_SELECTED_SERVER = "SELECTED_SERVER"
     private const val KEY_ANG_CONFIGS = "ANG_CONFIGS"
+    private const val KEY_SUB_SERVER_PREFIX = "SUB_SERVERS_"
     private const val KEY_SUB_IDS = "SUB_IDS"
     private const val KEY_WEBDAV_CONFIG = "WEBDAV_CONFIG"
 
-    //private val profileStorage by lazy { MMKV.mmkvWithID(ID_PROFILE_CONFIG, MMKV.MULTI_PROCESS_MODE) }
     private val mainStorage by lazy { MMKV.mmkvWithID(ID_MAIN, MMKV.MULTI_PROCESS_MODE) }
     private val profileFullStorage by lazy { MMKV.mmkvWithID(ID_PROFILE_FULL_CONFIG, MMKV.MULTI_PROCESS_MODE) }
     private val serverRawStorage by lazy { MMKV.mmkvWithID(ID_SERVER_RAW, MMKV.MULTI_PROCESS_MODE) }
@@ -43,6 +43,17 @@ object MmkvManager {
     //endregion
 
     //region Server
+
+    /**
+     * Reads the legacy server list from KEY_ANG_CONFIGS for migration.
+     * This method is for migration purposes only.
+     *
+     * @return The JSON string of legacy server list, or null if not exists.
+     */
+    fun readLegacyServerList(): String? {
+        return mainStorage.decodeString(KEY_ANG_CONFIGS)
+    }
+
 
     /**
      * Gets the selected server GUID.
@@ -63,27 +74,61 @@ object MmkvManager {
     }
 
     /**
-     * Encodes the server list.
+     * Encodes the server list for a given subscription.
+     * Saves to the subscription's serverList (including default subscription for ungrouped servers).
      *
      * @param serverList The list of server GUIDs.
+     * @param subscriptionId The subscription ID.
      */
-    fun encodeServerList(serverList: MutableList<String>) {
-        mainStorage.encode(KEY_ANG_CONFIGS, JsonUtil.toJson(serverList))
+    fun encodeServerList(serverList: MutableList<String>, subscriptionId: String) {
+        val subId = getSubscriptionId(subscriptionId)
+        val key = "$KEY_SUB_SERVER_PREFIX$subId"
+        mainStorage.encode(key, JsonUtil.toJson(serverList))
     }
 
+
     /**
-     * Decodes the server list.
+     * Decodes the server list for a given subscription.
+     * If subscriptionId is empty, returns ungrouped servers.
+     * Otherwise, returns servers from the specified subscription's serverList.
      *
+     * @param subscriptionId The subscription ID.
      * @return The list of server GUIDs.
      */
-    fun decodeServerList(): MutableList<String> {
-        val json = mainStorage.decodeString(KEY_ANG_CONFIGS)
+    fun decodeServerList(subscriptionId: String): MutableList<String> {
+        val subId = getSubscriptionId(subscriptionId)
+        val key = "$KEY_SUB_SERVER_PREFIX$subId"
+        val json = mainStorage.decodeString(key)
         return if (json.isNullOrBlank()) {
             mutableListOf()
         } else {
             JsonUtil.fromJson(json, Array<String>::class.java)?.toMutableList() ?: mutableListOf()
         }
     }
+
+    /**
+     * Decodes all server list (merged from all subscriptions including default subscription).
+     * Use this when you need the complete server list.
+     *
+     * @return The list of all server GUIDs.
+     */
+    fun decodeAllServerList(): MutableList<String> {
+        val allServers = mutableListOf<String>()
+        val subsList = decodeSubsList()
+
+        // If DEFAULT_SUBSCRIPTION_ID is not in the subscriptions list, add its servers
+        if (!subsList.contains(DEFAULT_SUBSCRIPTION_ID)) {
+            allServers.addAll(decodeServerList(DEFAULT_SUBSCRIPTION_ID))
+        }
+
+        // Add servers from all subscriptions
+        subsList.forEach { guid ->
+            allServers.addAll(decodeServerList(guid))
+        }
+
+        return allServers
+    }
+
 
     /**
      * Decodes the server configuration.
@@ -102,16 +147,6 @@ object MmkvManager {
         return JsonUtil.fromJson(json, ProfileItem::class.java)
     }
 
-//    fun decodeProfileConfig(guid: String): ProfileLiteItem? {
-//        if (guid.isBlank()) {
-//            return null
-//        }
-//        val json = profileStorage.decodeString(guid)
-//        if (json.isNullOrBlank()) {
-//            return null
-//        }
-//        return JsonUtil.fromJson(json, ProfileLiteItem::class.java)
-//    }
 
     /**
      * Encodes the server configuration.
@@ -123,23 +158,30 @@ object MmkvManager {
     fun encodeServerConfig(guid: String, config: ProfileItem): String {
         val key = guid.ifBlank { Utils.getUuid() }
         profileFullStorage.encode(key, JsonUtil.toJson(config))
-        val serverList = decodeServerList()
+
+        // Use default subscription for servers without subscription
+        val subId = getSubscriptionId(config.subscriptionId)
+        val serverList = decodeServerList(subId)
+
         if (!serverList.contains(key)) {
             serverList.add(0, key)
-            encodeServerList(serverList)
+            encodeServerList(serverList, subId)
             if (getSelectServer().isNullOrBlank()) {
                 mainStorage.encode(KEY_SELECTED_SERVER, key)
             }
         }
-//        val profile = ProfileLiteItem(
-//            configType = config.configType,
-//            subscriptionId = config.subscriptionId,
-//            remarks = config.remarks,
-//            server = config.getProxyOutbound()?.getServerAddress(),
-//            serverPort = config.getProxyOutbound()?.getServerPort(),
-//        )
-//        profileStorage.encode(key, JsonUtil.toJson(profile))
+
         return key
+    }
+
+    /**
+     * Encodes the server configuration directly without updating serverList.
+     *
+     * @param key The server GUID.
+     * @param configJson The server configuration JSON string.
+     */
+    fun encodeProfileDirect(key: String, configJson: String) {
+        profileFullStorage.encode(key, configJson)
     }
 
     /**
@@ -151,33 +193,44 @@ object MmkvManager {
         if (guid.isBlank()) {
             return
         }
+
+        // Get config to determine which subscription to update
+        val config = decodeServerConfig(guid)
+        val subId = getSubscriptionId(config?.subscriptionId)
+
+        // Remove from appropriate server list
+        val serverList = decodeServerList(subId)
+        serverList.remove(guid)
+        encodeServerList(serverList, subId)
+
+        // Clean up storage
         if (getSelectServer() == guid) {
             mainStorage.remove(KEY_SELECTED_SERVER)
         }
-        val serverList = decodeServerList()
-        serverList.remove(guid)
-        encodeServerList(serverList)
         profileFullStorage.remove(guid)
-        //profileStorage.remove(guid)
         serverAffStorage.remove(guid)
     }
 
     /**
      * Removes the server configurations via subscription ID.
      *
-     * @param subid The subscription ID.
+     * @param subscriptionId The subscription ID.
      */
-    fun removeServerViaSubid(subid: String) {
-        if (subid.isBlank()) {
-            return
-        }
-        profileFullStorage.allKeys()?.forEach { key ->
-            decodeServerConfig(key)?.let { config ->
-                if (config.subscriptionId == subid) {
-                    removeServer(key)
-                }
+    fun removeServerViaSubid(subscriptionId: String?) {
+        val subId = getSubscriptionId(subscriptionId)
+        val serverList = decodeServerList(subId)
+
+        // Remove all servers in the list
+        serverList.forEach { guid ->
+            if (getSelectServer() == guid) {
+                mainStorage.remove(KEY_SELECTED_SERVER)
             }
+            profileFullStorage.remove(guid)
+            serverAffStorage.remove(guid)
         }
+
+        serverList.clear()
+        encodeServerList(serverList, subId)
     }
 
     /**
@@ -235,7 +288,6 @@ object MmkvManager {
         val count = profileFullStorage.allKeys()?.count() ?: 0
         mainStorage.clearAll()
         profileFullStorage.clearAll()
-        //profileStorage.clearAll()
         serverAffStorage.clearAll()
         return count
     }
@@ -291,6 +343,10 @@ object MmkvManager {
     //endregion
 
     //region Subscriptions
+
+    private fun getSubscriptionId(subscriptionId: String?):String {
+        return subscriptionId?.ifEmpty { DEFAULT_SUBSCRIPTION_ID } ?: DEFAULT_SUBSCRIPTION_ID
+    }
 
     /**
      * Initializes the subscription list.

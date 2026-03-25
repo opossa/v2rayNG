@@ -1,8 +1,8 @@
 package com.v2ray.ang.fmt
 
 import com.v2ray.ang.AppConfig
-import com.v2ray.ang.enums.NetworkType
 import com.v2ray.ang.dto.ProfileItem
+import com.v2ray.ang.enums.NetworkType
 import com.v2ray.ang.extension.nullIfBlank
 import com.v2ray.ang.handler.MmkvManager
 import com.v2ray.ang.util.HttpUtil
@@ -22,17 +22,17 @@ open class FmtBase {
         val query = if (dicQuery != null)
             "?" + dicQuery.toList().joinToString(
                 separator = "&",
-                transform = { it.first + "=" + Utils.urlEncode(it.second) })
+                transform = { it.first + "=" + Utils.encodeURIComponent(it.second) })
         else ""
 
         val url = String.format(
             "%s@%s:%s",
-            Utils.urlEncode(userInfo ?: ""),
+            Utils.encodeURIComponent(userInfo ?: ""),
             Utils.getIpv6Address(HttpUtil.toIdnDomain(config.server.orEmpty())),
             config.serverPort
         )
 
-        return "${url}${query}#${Utils.urlEncode(config.remarks)}"
+        return "${url}${query}#${Utils.encodeURIComponent(config.remarks)}"
     }
 
     /**
@@ -43,7 +43,7 @@ open class FmtBase {
      */
     fun getQueryParam(uri: URI): Map<String, String> {
         return uri.rawQuery.split("&")
-            .associate { it.split("=").let { (k, v) -> k to Utils.urlDecode(v) } }
+            .associate { it.split("=").let { (k, v) -> k to Utils.decodeURIComponent(v) } }
     }
 
     /**

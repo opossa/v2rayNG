@@ -108,7 +108,6 @@
     <string name="server_obfs_password">混淆密码</string>
     <string name="server_lab_port_hop">跳跃端口 (会覆盖服务器端口)</string>
     <string name="server_lab_port_hop_interval">端口跳跃间隔 (秒)</string>
-    <string name="server_lab_stream_pinsha256">SHA256 证书指纹</string>
     <string name="server_lab_bandwidth_down">带宽下行 (支持的单位 k/m/g/t)</string>
     <string name="server_lab_bandwidth_up">带宽上行 (支持的单位 k/m/g/t)</string>
     <string name="server_lab_xhttp_mode">XHTTP 模式</string>
@@ -232,6 +231,9 @@
     <string name="title_pref_double_column_display">启用双列显示</string>
     <string name="summary_pref_double_column_display">配置列表以双列显示，允许在屏幕上显示更多内容。需要重启应用生效。</string>
 
+    <string name="title_pref_group_all_display">启用显示所有组</string>
+    <string name="summary_pref_group_all_display">添加一个额外的“所有选项卡”页面</string>
+
     <!-- AboutActivity -->
     <string name="title_pref_feedback">反馈</string>
     <string name="summary_pref_feedback">反馈改进或漏洞至 GitHub</string>
@@ -293,6 +295,10 @@
     <string name="title_import_config_count">导入 %d 个配置</string>
     <string name="title_export_config_count">导出 %d 个配置</string>
     <string name="title_update_config_count">更新 %d 个配置</string>
+    <string name="title_update_subscription_result">更新了 %1$d 个配置（%2$d 个成功，%3$d 个失败，%4$d 个跳过）</string>
+    <string name="title_update_subscription_no_subscription">无订阅</string>
+    <string name="toast_server_not_found_in_group">当前分组中未找到选中的服务器</string>
+    <string name="toast_fragment_not_available">无法定位当前视图</string>
     <string name="tasker_start_service">启动服务</string>
     <string name="tasker_setting_confirm">确定</string>
 

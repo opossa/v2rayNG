@@ -6,8 +6,6 @@ import android.util.Log
 import com.google.gson.JsonArray
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.dto.ConfigResult
-import com.v2ray.ang.enums.EConfigType
-import com.v2ray.ang.enums.NetworkType
 import com.v2ray.ang.dto.ProfileItem
 import com.v2ray.ang.dto.RulesetItem
 import com.v2ray.ang.dto.V2rayConfig
@@ -15,6 +13,8 @@ import com.v2ray.ang.dto.V2rayConfig.OutboundBean
 import com.v2ray.ang.dto.V2rayConfig.OutboundBean.OutSettingsBean
 import com.v2ray.ang.dto.V2rayConfig.OutboundBean.StreamSettingsBean
 import com.v2ray.ang.dto.V2rayConfig.RoutingBean.RulesBean
+import com.v2ray.ang.enums.EConfigType
+import com.v2ray.ang.enums.NetworkType
 import com.v2ray.ang.extension.isNotNullEmpty
 import com.v2ray.ang.extension.nullIfBlank
 import com.v2ray.ang.fmt.HttpFmt
@@ -139,7 +139,7 @@ object V2rayConfigManager {
     private fun getV2rayGroupConfig(context: Context, guid: String, config: ProfileItem): ConfigResult {
         val result = ConfigResult(false)
 
-        val serverList = MmkvManager.decodeServerList()
+        val serverList = MmkvManager.decodeAllServerList()
         val configList = serverList
             .mapNotNull { id -> MmkvManager.decodeServerConfig(id) }
             .filter { profile ->
@@ -467,6 +467,19 @@ object V2rayConfigManager {
 
             val rule = JsonUtil.fromJson(JsonUtil.toJson(item), RulesBean::class.java) ?: return
 
+            // Replace specific geoip rules with ext versions
+            rule.ip?.let { ipList ->
+                val updatedIpList = ArrayList<String>()
+                ipList.forEach { ip ->
+                    when (ip) {
+                        AppConfig.GEOIP_CN -> updatedIpList.add("ext:${AppConfig.GEOIP_ONLY_CN_PRIVATE_DAT}:cn")
+                        AppConfig.GEOIP_PRIVATE -> updatedIpList.add("ext:${AppConfig.GEOIP_ONLY_CN_PRIVATE_DAT}:private")
+                        else -> updatedIpList.add(ip)
+                    }
+                }
+                rule.ip = updatedIpList
+            }
+
             v2rayConfig.routing.rules.add(rule)
 
         } catch (e: Exception) {
@@ -776,13 +789,14 @@ object V2rayConfigManager {
                 || protocol.equals(EConfigType.TROJAN.name, true)
                 || protocol.equals(EConfigType.WIREGUARD.name, true)
                 || protocol.equals(EConfigType.HYSTERIA2.name, true)
+                || protocol.equals(EConfigType.HYSTERIA.name, true)
             ) {
                 muxEnabled = false
             } else if (outbound.streamSettings?.network == NetworkType.XHTTP.type) {
                 muxEnabled = false
             }
 
-            if (muxEnabled == true) {
+            if (muxEnabled) {
                 outbound.mux?.enabled = true
                 outbound.mux?.concurrency = MmkvManager.decodeSettingsString(AppConfig.PREF_MUX_CONCURRENCY, "8").orEmpty().toInt()
                 outbound.mux?.xudpConcurrency = MmkvManager.decodeSettingsString(AppConfig.PREF_MUX_XUDP_CONCURRENCY, "16").orEmpty().toInt()
@@ -1183,19 +1197,39 @@ object V2rayConfigManager {
             }
 
             NetworkType.KCP.type -> {
-                val kcpsetting = StreamSettingsBean.KcpSettingsBean()
-                kcpsetting.header.type = headerType ?: "none"
+                streamSettings.kcpSettings = StreamSettingsBean.KcpSettingsBean()
+                val udpMaskList = mutableListOf<StreamSettingsBean.FinalMaskBean.MaskBean>()
+                if (!headerType.isNullOrEmpty() && headerType != "none") {
+                    val kcpHeaderType = when {
+                        headerType == "wechat-video" -> "header-wechat"
+                        else -> "header-$headerType"
+                    }
+                    udpMaskList.add(StreamSettingsBean.FinalMaskBean.MaskBean(
+                        type = kcpHeaderType,
+                        settings = if (headerType == "dns" && !host.isNullOrEmpty()) {
+                            StreamSettingsBean.FinalMaskBean.MaskBean.MaskSettingsBean(
+                                domain = host
+                            )
+                        } else {
+                            null
+                        }
+                    ))
+                }
                 if (seed.isNullOrEmpty()) {
-                    kcpsetting.seed = null
+                    udpMaskList.add(StreamSettingsBean.FinalMaskBean.MaskBean(
+                        type = "mkcp-original"
+                    ))
                 } else {
-                    kcpsetting.seed = seed
+                    udpMaskList.add(StreamSettingsBean.FinalMaskBean.MaskBean(
+                        type = "mkcp-aes128gcm",
+                        settings = StreamSettingsBean.FinalMaskBean.MaskBean.MaskSettingsBean(
+                            password = seed
+                        )
+                    ))
                 }
-                if (host.isNullOrEmpty()) {
-                    kcpsetting.header.domain = null
-                } else {
-                    kcpsetting.header.domain = host
-                }
-                streamSettings.kcpSettings = kcpsetting
+                streamSettings.finalmask = StreamSettingsBean.FinalMaskBean(
+                    udp = udpMaskList.toList()
+                )
             }
 
             NetworkType.WS.type -> {

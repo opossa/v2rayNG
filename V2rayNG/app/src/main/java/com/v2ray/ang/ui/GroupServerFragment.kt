@@ -11,13 +11,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.contracts.MainAdapterListener
 import com.v2ray.ang.databinding.FragmentGroupServerBinding
 import com.v2ray.ang.databinding.ItemQrcodeBinding
-import com.v2ray.ang.enums.EConfigType
 import com.v2ray.ang.dto.ProfileItem
+import com.v2ray.ang.enums.EConfigType
 import com.v2ray.ang.extension.toast
 import com.v2ray.ang.extension.toastError
 import com.v2ray.ang.extension.toastSuccess
@@ -28,7 +29,8 @@ import com.v2ray.ang.viewmodel.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>() {
+class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>(),
+    SwipeRefreshLayout.OnRefreshListener {
     private val ownerActivity: MainActivity
         get() = requireActivity() as MainActivity
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -67,6 +69,10 @@ class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>() {
 
         itemTouchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter, allowSwipe = false))
         itemTouchHelper?.attachToRecyclerView(binding.recyclerView)
+
+        binding.refreshLayout.setOnRefreshListener(this)
+        // Set the distance to trigger sync to 160dp
+        binding.refreshLayout.setDistanceToTriggerSync((160 * resources.displayMetrics.density).toInt())
 
         mainViewModel.updateListAction.observe(viewLifecycleOwner) { index ->
             if (mainViewModel.subscriptionId != subId) {
@@ -142,7 +148,7 @@ class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>() {
      * @param guid The server unique identifier
      */
     private fun shareFullContent(guid: String) {
-        ownerActivity.lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val result = AngConfigManager.shareFullContent2Clipboard(ownerActivity, guid)
             launch(Dispatchers.Main) {
                 if (result == 0) {
@@ -164,6 +170,7 @@ class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>() {
         val intent = Intent().putExtra("guid", guid)
             .putExtra("isRunning", mainViewModel.isRunning.value)
             .putExtra("createConfigType", profile.configType.value)
+            .putExtra("subscriptionId", subId)
         when (profile.configType) {
             EConfigType.CUSTOM -> {
                 ownerActivity.startActivity(intent.setClass(ownerActivity, ServerCustomConfigActivity::class.java))
@@ -211,7 +218,7 @@ class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>() {
      * @param position The position in the list
      */
     private fun removeServerSub(guid: String, position: Int) {
-        ownerActivity.mainViewModel.removeServer(guid)
+        mainViewModel.removeServer(guid)
         adapter.removeServerSub(guid, position)
     }
 
@@ -268,6 +275,45 @@ class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>() {
             }
 
             shareServer(guid, profile, position, shareOptions, skip)
+        }
+    }
+
+    override fun onRefresh() {
+        ownerActivity.importConfigViaSub()
+        binding.refreshLayout.isRefreshing = false
+    }
+
+    /**
+     * Scrolls to the currently selected server in the RecyclerView
+     */
+    fun scrollToSelectedServer() {
+        val selectedGuid = MmkvManager.getSelectServer()
+        if (selectedGuid.isNullOrEmpty()) {
+            ownerActivity.toast(R.string.title_file_chooser)
+            return
+        }
+
+        // Find the position of the selected server
+        val serversCache = mainViewModel.serversCache
+        val position = serversCache.indexOfFirst { it.guid == selectedGuid }
+        val recyclerView = binding.recyclerView
+
+        if (position >= 0) {
+            // Get the layout manager
+            val layoutManager = recyclerView.layoutManager as? GridLayoutManager
+
+            if (layoutManager != null) {
+                // Scroll to position with offset to center it on screen
+                // First scroll to position, then adjust to center
+                recyclerView.post {
+                    layoutManager.scrollToPositionWithOffset(position, recyclerView.height / 3)
+                }
+            } else {
+                // Fallback to smooth scroll if layout manager is not GridLayoutManager
+                recyclerView.smoothScrollToPosition(position)
+            }
+        } else {
+            ownerActivity.toast(R.string.toast_server_not_found_in_group)
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.v2ray.ang.fmt
 
-import com.v2ray.ang.enums.EConfigType
 import com.v2ray.ang.dto.ProfileItem
 import com.v2ray.ang.dto.V2rayConfig.OutboundBean
+import com.v2ray.ang.enums.EConfigType
 import com.v2ray.ang.extension.idnHost
 import com.v2ray.ang.extension.isNotNullEmpty
 import com.v2ray.ang.handler.V2rayConfigManager
@@ -23,7 +23,7 @@ object SocksFmt : FmtBase() {
         if (uri.idnHost.isEmpty()) return null
         if (uri.port <= 0) return null
 
-        config.remarks = Utils.urlDecode(uri.fragment.orEmpty()).let { it.ifEmpty { "none" } }
+        config.remarks = Utils.decodeURIComponent(uri.fragment.orEmpty()).let { it.ifEmpty { "none" } }
         config.server = uri.idnHost
         config.serverPort = uri.port.toString()
 

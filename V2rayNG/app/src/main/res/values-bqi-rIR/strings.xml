@@ -108,7 +108,6 @@
     <string name="server_obfs_password">رزم obfs</string>
     <string name="server_lab_port_hop">پورت گوم (درگا سرورن ز نۊ هؽل اکونه)</string>
     <string name="server_lab_port_hop_interval">فاسله پورت گوم (سانیه)</string>
-    <string name="server_lab_stream_pinsha256">pinSHA256</string>
     <string name="server_lab_bandwidth_down">ب لم ٱووڌن پئنا باند (واهڌ)</string>
     <string name="server_lab_bandwidth_up">وا روء رئڌن پئنا باند (واهڌ)</string>
     <string name="server_lab_xhttp_mode">هالت XHTTP</string>
@@ -235,6 +234,8 @@
     <string name="title_pref_double_column_display">ره وندن نشووݩ داڌن دو سۊتۊنی</string>
     <string name="summary_pref_double_column_display">نومگه نمایه یل من دو سۊتۊن نشووݩ داڌه ابۊن وو چینۉ ترین موئتوا بیشتری ن سیل کۊنین. سی ره وستن، وا برنومه ن ز نۊ ره ونین.</string>
 
+    <string name="title_pref_group_all_display">نشووݩ داڌن پوی بونکۊ یل ن فعال کۊنین</string>
+    <string name="summary_pref_group_all_display">ی بلگه «پوی بلگه یل» ازاف کۊنین</string>
     <!-- AboutActivity -->
     <string name="title_pref_feedback">فشناڌن منشڌ</string>
     <string name="summary_pref_feedback">فشناڌن منشڌ یا گوزارش موشکلا من Github</string>
@@ -296,6 +297,10 @@
     <string name="title_import_config_count">و من ٱووردن %d کانفیگ</string>
     <string name="title_export_config_count">و در کشیڌن %d کانفیگ</string>
     <string name="title_update_config_count">ورۊ کردن %d کانفیگ</string>
+    <string name="title_update_subscription_result">%1$d کانفیگ ورۊ وابی (مووفق: %2$d، شکست خرده: %3$d، رڌ وابیڌه: %4$d)</string>
+    <string name="title_update_subscription_no_subscription">بؽ اشتراک</string>
+    <string name="toast_server_not_found_in_group">Selected server not found in current group</string>
+    <string name="toast_fragment_not_available">Unable to locate current view</string>
     <string name="tasker_start_service">ره وندن خدمات</string>
     <string name="tasker_setting_confirm">قوۊل</string>
 
@@ -416,7 +421,7 @@
     <string-array name="policy_group_type">
         <item>کم ترین پینگ</item>
         <item>کم ترین بار(لود)</item>
-        <item>تصادفی</item>
+        <item>تساڌۊفی</item>
         <item>گردشی</item>
     </string-array>
 
